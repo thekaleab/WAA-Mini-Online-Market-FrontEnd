@@ -28,36 +28,15 @@ export const cancelOrder = (id) => api.post(`${orderRoute}/cancel/${id}`);
 const authRoute = AppConst.api.authRoute;
 export const login = async (user) => { 
     try {
-        const { data: userDetail } = await Promise.resolve({data: {
-            firstName: "Abenezer", lastName: "Mamuyea",
-            accessToken: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY1MDIyNzI4NiwiaWF0IjoxNjUwMjIxMjg2fQ.ev4oJMpYb30MOHR6b9phBeo6uWLryS8hUgWOkisBFRIOwC8zawDGhEjEkMjtsS7O33ZU96_b_ivZpp-nhOAjRA",
-            refreshToken: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY1MDIyNzI4NiwiaWF0IjoxNjUwMjIxMjg2fQ.ev4oJMpYb30MOHR6b9phBeo6uWLryS8hUgWOkisBFRIOwC8zawDGhEjEkMjtsS7O33ZU96_b_ivZpp-nhOAjRA",
-            role: {
-                id: 1,
-                name: "ADMIN"
-            }                            
-        }
-    });
-    localStorage.setItem(AppConst.storage.accessToken, userDetail.accessToken);
-    localStorage.setItem(AppConst.storage.refreshToken, userDetail.refreshToken);
-    return userDetail;
-} catch (e) {
-    Promise.reject(e);
-}
+        const { data: userDetail } = await api.post(`${authRoute}/login`, user);
+        localStorage.setItem(AppConst.storage.accessToken, userDetail.accessToken);
+        localStorage.setItem(AppConst.storage.refreshToken, userDetail.refreshToken);
+        return userDetail;
+    } catch (e) {
+        Promise.reject(e);
+    }
 };
-export const register = async (user) => {  
-    return Promise.resolve({ data: {
-            firstName: "Abenezer", lastName: "Mamuyea",
-            accessToken: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY1MDIyNzI4NiwiaWF0IjoxNjUwMjIxMjg2fQ.ev4oJMpYb30MOHR6b9phBeo6uWLryS8hUgWOkisBFRIOwC8zawDGhEjEkMjtsS7O33ZU96_b_ivZpp-nhOAjRA",
-            refreshToken: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY1MDIyNzI4NiwiaWF0IjoxNjUwMjIxMjg2fQ.ev4oJMpYb30MOHR6b9phBeo6uWLryS8hUgWOkisBFRIOwC8zawDGhEjEkMjtsS7O33ZU96_b_ivZpp-nhOAjRA",
-            role: {
-                id: 1,
-                name: "ADMIN"
-            }                            
-        }
-    });
-}
-
+export const register = (user) => api.post(`${authRoute}/register`, user);
 export const logout = (user) => api.post(`${authRoute}/logout`, user);
 export const refreshToken = async () => { 
     const token = localStorage.getItem(AppConst.storage.refreshToken);
@@ -74,13 +53,6 @@ export const refreshToken = async () => {
     }
 }
 
-
 // roles
 const roleRoute = AppConst.api.roleRoute;
-export const getRoles = () => Promise.resolve({
-        data: [
-            {id: 1, name: 'ADMIN'},
-            {id: 2, name: 'BUY'},
-            {id: 3, name: 'SELL'}
-        ]
-});
+export const getRoles = () => api.get(roleRoute);

@@ -1,20 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+import * as AppConst from "../../services/constants";
+import * as api from "../../services/api";
 
 function Signup() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [modal, setModal] = useState(false);
   const navigate = useNavigate();
 
+  const roles = useRoles();
+
+  const [user, onChange] = useUser();
+  
   const register = (e) => {
     e.preventDefault(); 
-    // TODO
-  };
-
-  const setUser = (user) => {
-    // TODO
+    api.register(user)
+      .then(result => {
+        localStorage.setItem(AppConst.storage.user, JSON.stringify(result.data));
+        setModal(false);
+        toast.success('Account successfully created');
+        navigate('/');
+      })
+      .catch(e => {
+        toast.error("Can't create account now. please try again")
+      });
   };
 
   return (
@@ -31,7 +41,7 @@ function Signup() {
         <>
           <div className="formWrapper" onClick={() => setModal(false)} />
           <div className="modal-content position-absolute ">
-            <div className="d-flex justify-content-end align-items-center mb-1 mt-4 me-4">
+            <div className="d-flex justify-content-end align-items-center mb-1 mt-2 me-2">
               <button
                 type="button"
                 className="btn-close"
@@ -40,24 +50,24 @@ function Signup() {
             </div>
             <div className="modal-body ps-5 pe-5 pt-0 pb-3">
               <h5
-                className="modal-title login-header text-center mb-5"
+                className="modal-title login-header text-center mb-3"
                 id="exampleModalLabel"
               >
                 Register
               </h5>
               <form onSubmit={register}>
                 <div className="mb-3 text-start">
-                  <label htmlFor="exampleInputEmail1" className="form-label">
+                  <label htmlFor="username" className="form-label">
                     Username
                   </label>
                   <input
                     type="text"
                     className="form-control"
-                    id="exampleInputEmail1"
+                    id="username"
                     aria-describedby="emailHelp"
                     required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={user.username}
+                    onChange={(e) => onChange('username', e.target.value)}
                   />
                 </div>
                 <div className="mb-3 text-start">
@@ -70,25 +80,39 @@ function Signup() {
                     id="exampleInputEmail1"
                     aria-describedby="emailHelp"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={user.email}
+                    onChange={(e) => onChange('email', e.target.value)}
                   />
                   <div id="emailHelp" className="form-text">
                     We'll never share your email with anyone else.
                   </div>
                 </div>
                 <div className="mb-3 text-start">
-                  <label htmlFor="exampleInputPassword1" className="form-label">
+                  <label htmlFor="password" className="form-label">
                     Password
                   </label>
                   <input
                     required
                     type="password"
                     className="form-control"
-                    id="exampleInputPassword1"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    id="password"
+                    value={user.password}
+                    onChange={(e) => onChange('password', e.target.value)}
                   />
+                </div>
+                <div className="mb-3 text-start">
+                  <label htmlFor="role" className="form-label">
+                    What would you like to do?
+                  </label>
+                  <select required
+                    className="form-control"
+                    id="role"
+                    onChange={(e) => onChange('role_id', e.target.value)}
+                  > 
+                    {
+                      roles.map(role => <option key={role.id} value={role.id}>{role.name}</option>)
+                    }
+                  </select>
                 </div>
                 <div className="mb-3 form-check text-start">
                   <input
@@ -101,7 +125,7 @@ function Signup() {
                     I agree the terms and conditions
                   </label>
                 </div>
-                <button type="submit" className="btn btn-dark w-100 mt-5 mb-3">
+                <button type="submit" className="btn btn-dark w-100 mt-3 mb-4">
                   Register
                 </button>
               </form>
@@ -111,6 +135,38 @@ function Signup() {
       )}
     </>
   );
+}
+
+const useRoles = () => {
+  const [roles, setRoles] = useState([]);
+
+  useEffect(() => {
+        api.getRoles().then(result => {
+          setRoles(result.data);
+        }).catch(e => {
+          toast.error("Network error, please reload page");
+        });
+  }, []);
+
+  return roles;
+}
+
+const useUser = () => {
+  const emptyUser = {
+    username: '',
+    password: '',
+    role_id: ''
+  };
+
+  const [user, setUser] = useState(emptyUser);
+
+  const onChange = (target, value) => {
+    setUser(prev => {
+      return {...prev, [target]: value}
+    });
+  }
+
+  return [user, onChange]
 }
 
 export default Signup;
