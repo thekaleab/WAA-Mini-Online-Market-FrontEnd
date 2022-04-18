@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 
-import * as userService from "../../services/user";
+import * as storageService from "../../services/storage";
 import * as api from "../../services/api";
 
 import "./Login.css";
+import { storage } from "../../services/constants";
 
 function Login() {
 
@@ -19,7 +20,7 @@ function Login() {
   const login = (e) => {
     e.preventDefault();
     api.login().then(result => {
-      userService.storeUser(result.data);
+      storageService.storeUser(result.data);
       toast.success("Login successful");
       setLoginError(false);
       navigate("/");

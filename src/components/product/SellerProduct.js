@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import { NavLink, useParams } from "react-router-dom";
+import { toast } from 'react-toastify';
 
-import { ToastContainer, toast } from 'react-toastify';
+import ProductModal from './ProductModal';
 
 import * as api from '../../services/api';
 
-function Product() {
+function SellerProduct() {
   const { id } = useParams();
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal ] = useState(false);
   
-
-  const addProduct = (product) => {
-    // TODO
-  };
 
   useEffect(() => {
     const getProduct = async () => {
@@ -29,7 +27,7 @@ function Product() {
       }
     };
     getProduct();
-  }, []);
+  }, [id]);
 
   const Loading = () => {
     return (
@@ -72,23 +70,24 @@ function Product() {
           
           <button
             className="btn btn-outline-dark py-2 px-4"
-            onClick={() => addProduct(product)}
+            onClick={() => setShowModal(true)}
           >
               {" "}
-              Add to Cart
+              Edit
           </button>
-            <NavLink to="/cart" className="btn btn-dark px-3 py-2 ms-2">
-              Go to Cart
-            </NavLink>
-          </div>
+          <NavLink to="/seller/products" className="btn btn-dark px-3 py-2 ms-2">
+            Back
+          </NavLink>
+          
+        </div>
       </>
     );
   };
-
   return (
     <div>
       <div className="container py-5 ">
         <div className="row py-5">
+          <ProductModal show={showModal} onHide={() => setShowModal(false)} product={product} mode='edit' />
           {loading ? <Loading /> : <ShowProduct />}
         </div>
       </div>
@@ -96,4 +95,4 @@ function Product() {
   );
 }
 
-export default Product;
+export default SellerProduct;

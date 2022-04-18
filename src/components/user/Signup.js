@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import * as userService from "../../services/user";
+import * as storageService from "../../services/storage";
 import * as api from "../../services/api";
 
 function Signup() {

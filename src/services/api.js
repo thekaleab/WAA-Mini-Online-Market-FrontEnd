@@ -1,14 +1,23 @@
 import { httpReq as api } from "./http";
 import * as AppConst from './constants';
-import * as userService from './user';
+import * as storageService from './storage';
+
+import fake_products from "./fake_products";
 
 
 // Product end points
 const productRoute = AppConst.api.productRoute;
 // const getProducts = () => api.get(productRoute);
 // const getProductById = (id) => api.get(`${productRoute}/${id}`);
-export const getProducts = () => api.get('https://fakestoreapi.com/products'); // temprary, disable this.
-export const getProductById = (id) => api.get(`https://fakestoreapi.com/products/${id}`); // temporary, disable this
+export const getProducts = () => Promise.resolve({data: fake_products});
+export const getProductById = (id) =>{  
+    const product = fake_products.find(p => p.id == id);
+    if(product !== null || product !== undefined) {
+        return Promise.resolve({data: product });
+    } else {
+        return Promise.reject();
+    }
+}
 export const createProduct = (product) => api.post(productRoute, product);
 export const updateProduct = (product) => api.put(`${productRoute}/${product.id}`, product);
 export const deleteProduct = (id) => api.delete(`${productRoute}/${id}`);
@@ -59,8 +68,8 @@ export const refreshToken = async () => {
     }
     try {
         const response =  await api.post(`${authRoute}/refreshToken`, token);
-        userService.storeAccessToken(response.accessToken);
-        userService.storeRefreshToken(response.refreshToken);
+        storageService.storeAccessToken(response.accessToken);
+        storageService.storeRefreshToken(response.refreshToken);
     } catch(e) {
         Promise.reject("Refresh token can't be generated, loging again");
     }
@@ -76,3 +85,7 @@ export const getRoles = () => Promise.resolve({
             {id: 3, name: 'SELL'}
         ]
 });
+
+
+
+
