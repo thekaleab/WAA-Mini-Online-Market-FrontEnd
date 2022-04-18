@@ -1,7 +1,8 @@
 const storage = {
     accessToken: 'access_token',
     refreshToken: 'refresh_token',
-    user: 'user'
+    user: 'user',
+    cart: 'cart'
 }
 
 const  api = {

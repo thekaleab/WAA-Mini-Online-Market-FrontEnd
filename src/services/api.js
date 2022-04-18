@@ -1,4 +1,4 @@
-import { httpReq as api } from "./http";
+import { httpReq as api, paymentApi } from "./http";
 import * as AppConst from './constants';
 import * as storageService from './storage';
 
@@ -27,7 +27,7 @@ const orderRoute = AppConst.api.orderRoute;
 export const getOrders = () => api.get(orderRoute);
 export const getOrderById = (id) => api.get(`${orderRoute}/${id}`);
 export const updateOrder = (order) => api.put(`${orderRoute}/${order.id}`, order);
-export const createOrder = (order) => api.save(orderRoute, order);
+export const createOrder = (order) => api.post(orderRoute, order);
 export const cancelOrder = (id) => api.post(`${orderRoute}/cancel/${id}`);
 
 
@@ -85,6 +85,12 @@ export const getRoles = () => Promise.resolve({
             {id: 3, name: 'SELL'}
         ]
 });
+
+
+// fake payment 
+export const getStripSecrete =  (total) => Promise.resolve({ data: {
+    clientSecret: 'pi_1DqfHd2eZvKYlo2CuJu7a7Ci_secret_mhjmsxBEPxbVvuNrXPsokvJX7'
+}});
 
 
 

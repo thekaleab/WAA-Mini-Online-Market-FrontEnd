@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { NavLink } from "react-router-dom";
-import Login from '../user/Login'
-import Signup from '../user/Signup'
+import { useDispatch, useSelector } from "react-redux";
+
 
 function Navbar() {
-  const state = useState([]);
+  const state = useSelector((state) => state.handleCart);
   const userState = useState({});
+  
   const logout = () => {
     // TODO logout
   };

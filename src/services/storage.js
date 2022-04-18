@@ -5,7 +5,7 @@ export const storeUser = (user) => {
 }
 
 export const loadUser = () => {
-    return localStorage.getItem(JSON.parse(AppConst.storage.use));
+    return JSON.parse(localStorage.getItem(AppConst.storage.user));
 }
 
 export const storeAccessToken = (token) => {
@@ -28,4 +28,13 @@ export const clearUserData = () => {
     localStorage.removeItem(AppConst.storage.user);
     localStorage.removeItem(AppConst.storage.accessToken);
     localStorage.removeItem(AppConst.storage.refreshToken);
+}
+
+
+export const storeCart = (cart) => {
+    localStorage.setItem(AppConst.storage.cart, JSON.stringify(cart));
+}
+
+export const loadCart = () => {
+    return JSON.parse(localStorage.getItem(AppConst.storage.cart));
 }

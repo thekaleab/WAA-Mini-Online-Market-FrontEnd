@@ -57,3 +57,8 @@ code {
   font-size: 30px;
   margin-right: 5px;
 }
+
+
+.bg-dark-text {
+  background-color: rgba(44, 82, 106, 0.934) !important;
+}

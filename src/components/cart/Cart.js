@@ -1,30 +1,36 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { deleteCart } from "../../redux/action";
 
 
 function Cart() {
 
-  const [ state, setState ] = useState([]);
+  const state = useSelector((state) => state.handleCart);
   const [ userState, setUserState ] = useState(null);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   const removeFromCart = (item) => {
-    //Delete
+    dispatch(deleteCart(item));
   };
 
   const proceedCheckout = () => {
     if (userState !== null) {
       navigate("/checkout");
     } else {
-      toast("Please login first!");
+      toast.info("Please login first!");
     }
+
+    navigate("/checkout"); // TODO remove this.
   };
 
   const cartItems = (product) => {
     return (
-      <div key={product.id} className="px-4 my-5 bg-light rounded-3 ">
+      <div key={product.id} className="px-4 m-5 bg-light rounded-3 ">
         <div className="container py-4">
           <button
             onClick={() => removeFromCart(product)}
@@ -39,6 +45,7 @@ function Cart() {
                 height="200px"
                 width="180px"
               />
+              <span className="align-top badge mx-3 bg-dark-text rounded-pill">{product.qty}</span>
             </div>
             <div className="col-md-4">
               <h3>{product.title}</h3>
@@ -80,8 +87,10 @@ function Cart() {
   return (
     <>
       {state.length === 0 && emptyCart()}
-      {state.length !== 0 && state.map(cartItems)}
-      {state.length !== 0 && checkoutButton()}
+      <div className="mx-5 ps-3 pe-4">
+        {state.length !== 0 && state.map(cartItems)}
+        {state.length !== 0 && checkoutButton()}
+      </div>
     </>
   );
 }

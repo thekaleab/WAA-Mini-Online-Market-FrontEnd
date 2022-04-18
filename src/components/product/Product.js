@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { NavLink, useParams } from "react-router-dom";
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { addCart } from "../../redux/action";
 
 import * as api from '../../services/api';
 
@@ -11,9 +13,10 @@ function Product() {
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
   
+  const dispatch = useDispatch();
 
   const addProduct = (product) => {
-    // TODO
+    dispatch(addCart(product));
   };
 
   useEffect(() => {

@@ -14,6 +14,13 @@ import Profile from '../components/user/Profile';
 import SellerProducts from '../components/product/SellerProducts';
 import SellerProduct from '../components/product/SellerProduct';
 
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+
+const promise = loadStripe(
+    "pk_test_TYooMQauvdEDq54NiTphI7jx"
+);
+
 const AppRoutes = 
     <Routes>
         <Route exact path="/" element={<Home />} />
@@ -21,7 +28,12 @@ const AppRoutes =
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout/>} />
+        <Route path="/checkout" element={
+                                    <Elements stripe={promise}>
+                                        <Checkout />
+                                    </Elements>   
+                                } 
+        />
         <Route path="/orders" element={<Orders />} />
         <Route path="/orders/:id" element={<Order />} />
         <Route path="/login" element={<Login />} />
