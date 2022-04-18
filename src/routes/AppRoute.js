@@ -10,6 +10,7 @@ import Orders from '../components/order/Orders';
 import Order from '../components/order/Order';
 import Login from '../components/user/Login';
 import Signup from '../components/user/Signup';
+import Profile from '../components/user/Profile';
 
 const AppRoutes = 
     <Routes>
@@ -23,6 +24,7 @@ const AppRoutes =
         <Route path="/orders/:id" element={<Order />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
     </Routes>
 
 

@@ -32,12 +32,6 @@
   font-size: 24px;
 }
 
-.modal-content{
-  z-index: 1;
-  right: 30%;
-  top: 85px;
-  width: 35vw !important;
-}
 
 .formWrapper{
   width: 100vw;
