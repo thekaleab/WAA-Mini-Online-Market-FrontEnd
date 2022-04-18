@@ -1,0 +1,8 @@
+.payment-card {
+    background-color: rgba(44, 82, 106, 0.934) ;
+    width: 288px;
+    min-height: 160px;
+    color: white;
+    border: 1px solid white;
+    border-radius: 0.5em;
+}

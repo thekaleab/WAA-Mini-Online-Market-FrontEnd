@@ -1,6 +1,8 @@
 import { Tab, Row, Col, Nav, Modal, Container } from 'react-bootstrap';
 import { useState } from 'react';
 
+import "./profile.css";
+
 function Profile(){
     return(
         <div className="container py-4 my-4">
@@ -107,8 +109,38 @@ const Address = () => {
 
 const Payment = () => {
   return(
-    <div>
-      <h5>Payment</h5>
+    <div className="container">
+      <div className="row g-0">
+        <div className="modals">
+            {/* <PersonalInfoModal show={showPersonalInfoModal} onHide={()=>setShowPersonalInfoModal(false)} /> */}
+        </div>
+        <div className="card col-md-8">
+            <div className="card-header row g-0 py-2">
+              <div className="col-8"> 
+                  <h4>Payment method </h4>
+              </div>
+              <div className="col-4 text-end">
+                {/* <button onClick={() => setShowPersonalInfoModal(true)} 
+                        className="btn btn-sm btn-outline-dark ms-2">
+                    <i className="fa fa-pencil me-1 "></i>
+                </button> */}
+              </div>
+            </div>
+            <div className="card-body py-2">
+              <div className="row m-3 p-2 py-2 payment-card">
+                <div className="col-12 align-middle pt-3">
+                    <h6>Card ending in {'8888'}</h6>
+                </div>
+                <div className="col-9 align-middle">
+                    {'Abenezer Mamuyea'}
+                </div>
+                <div className="col-3 align-middle">
+                    {'02/12'}
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
     </div>
   )
 }
@@ -116,13 +148,14 @@ const Payment = () => {
 
 const PersonalInfoModal = (props) => {
   let modal = props.modal;
+
   const hideModal = () => {
     props.onHide();
   }
   const emptyUser = {
-    username: '',
+    firstName: '',
+    lastName: '',
     password: '',
-    role_id: '',
     email: '',
     address: {
       zip: '',
@@ -137,14 +170,25 @@ const PersonalInfoModal = (props) => {
 
   const onChange = (target, value) => {
     setUser(prev => {
-      return {
-        ...prev, [target]: value
+      if(target.startsWith('address.')) {
+          return {
+            ...prev,
+            address: {
+              ...prev.address,
+              [target.split('address.')[1]]: value
+            }
+          }
+      } else {
+        return {
+          ...prev, [target]: value
+        }
       }
     })
   }
 
-  const update = () => {
-
+  const update = (e) => {
+      e.preventDefault();
+      return false;
   }
 
   return (
@@ -160,47 +204,47 @@ const PersonalInfoModal = (props) => {
               <div className="row">
                 <div className="col-6">
                   <div className="mb-3 text-start">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
+                    <label htmlFor="firstName" className="form-label">
                        First Name
                     </label>
                     <input
-                      type="email"
+                      type="text"
                       className="form-control"
-                      id="exampleInputEmail1"
-                      aria-describedby="emailHelp"
+                      id="firstName"
+                      aria-describedby="firstNameHelp"
                       required
                       value={user.firstName}
                       onChange={(e) => onChange('firstName', e.target.value)}
                     />
-                    <div id="emailHelp" className="form-text">
+                    <div id="firstName" className="form-text">
                        {}
                     </div>
                   </div>
                   <div className="mb-3 text-start">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
+                    <label htmlFor="lastName" className="form-label">
                        Last Name
                     </label>
                     <input
-                      type="email"
+                      type="lastName"
                       className="form-control"
-                      id="exampleInputEmail1"
-                      aria-describedby="emailHelp"
+                      id="lastName"
+                      aria-describedby="lastNameHelp"
                       required
                       value={user.lastName}
                       onChange={(e) => onChange('lastName', e.target.value)}
                     />
-                    <div id="emailHelp" className="form-text">
+                    <div id="lastNameHelp" className="form-text">
                         {}
                     </div>
                   </div>
                   <div className="mb-3 text-start">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
+                    <label htmlFor="email" className="form-label">
                        Email
                     </label>
                     <input
                       type="email"
                       className="form-control"
-                      id="exampleInputEmail1"
+                      id="email"
                       aria-describedby="emailHelp"
                       required
                       value={user.email}
@@ -211,19 +255,19 @@ const PersonalInfoModal = (props) => {
                     </div>
                   </div>
                   <div className="mb-3 text-start">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
+                    <label htmlFor="address_street" className="form-label">
                        Street Address
                     </label>
                     <input
-                      type="email"
+                      type="text"
                       className="form-control"
-                      id="exampleInputEmail1"
-                      aria-describedby="emailHelp"
+                      id="address_street"
+                      aria-describedby="streetHelp"
                       required
-                      value={user.address}
-                      onChange={(e) => onChange('address', e.target.value)}
+                      value={user.address.street}
+                      onChange={(e) => onChange('address.street', e.target.value)}
                     />
-                    <div id="emailHelp" className="form-text">
+                    <div id="streetHelp" className="form-text">
                        {}
                     </div>
                   </div>
@@ -231,76 +275,76 @@ const PersonalInfoModal = (props) => {
                 <div className="col-6">
                   
                   <div className="mb-3 text-start">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
+                    <label htmlFor="address_city" className="form-label">
                        City
                     </label>
                     <input
-                      type="email"
+                      type="text"
                       className="form-control"
-                      id="exampleInputEmail1"
-                      aria-describedby="emailHelp"
+                      id="address_city"
+                      aria-describedby="cityHelp"
                       required
-                      value={user.address}
-                      onChange={(e) => onChange('city', e.target.value)}
+                      value={user.address.city}
+                      onChange={(e) => onChange('address.city', e.target.value)}
                     />
-                    <div id="emailHelp" className="form-text">
+                    <div id="cityHelp" className="form-text">
                         {}
                     </div>
                   </div>
                   <div className="mb-3 text-start">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
+                    <label htmlFor="addresss_state" className="form-label">
                        State
                     </label>
                     <input
-                      type="email"
+                      type="text"
                       className="form-control"
-                      id="exampleInputEmail1"
-                      aria-describedby="emailHelp"
+                      id="addresss_state"
+                      aria-describedby="stateHelp"
                       required
-                      value={user.address}
-                      onChange={(e) => onChange('state', e.target.value)}
+                      value={user.address.state}
+                      onChange={(e) => onChange('address.state', e.target.value)}
                     />
-                    <div id="emailHelp" className="form-text">
+                    <div id="stateHelp" className="form-text">
                       {}
                     </div>
                   </div>
                   <div className="mb-3 text-start">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
+                    <label htmlFor="address_zip" className="form-label">
                        ZIP
                     </label>
                     <input
-                      type="email"
+                      type="text"
                       className="form-control"
-                      id="exampleInputEmail1"
-                      aria-describedby="emailHelp"
+                      id="address_zip"
+                      aria-describedby="zipHelp"
                       required
-                      value={user.address}
-                      onChange={(e) => onChange('zip', e.target.value)}
+                      value={user.address.zip}
+                      onChange={(e) => onChange('address.zip', e.target.value)}
                     />
-                    <div id="emailHelp" className="form-text">
+                    <div id="zipHelp" className="form-text">
                       {}
                     </div>
                   </div>
                   <div className="mb-3 text-start">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
+                    <label htmlFor="streetCountry" className="form-label">
                        Country
                     </label>
                     <input
-                      type="email"
+                      type="text"
                       className="form-control"
-                      id="exampleInputEmail1"
-                      aria-describedby="emailHelp"
+                      id="streetCountry"
+                      aria-describedby="countryHelp"
                       required
-                      value={user.address}
-                      onChange={(e) => onChange('country', e.target.value)}
+                      value={user.address.country}
+                      onChange={(e) => onChange('address.country', e.target.value)}
                     />
-                    <div id="emailHelp" className="form-text">
+                    <div id="countryHelp" className="form-text">
                       {}
                     </div>
                   </div>
                 </div>
                 <div className="col-4 offset-4">
-                    <button  type="submit" className="btn btn-dark w-100 mt-5 mb-3">
+                    <button  onClick={update} className="btn btn-dark w-100 mt-5 mb-3">
                          Update
                     </button>
                 </div>
