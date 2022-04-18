@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { signIn } from "../../redux/action";
 
-
-import * as storageService from "../../services/storage";
 import * as api from "../../services/api";
 
 import "./Login.css";
-import { storage } from "../../services/constants";
 
 function Login() {
 
@@ -15,12 +14,17 @@ function Login() {
   const roles = useRoles();
   const [ loginError, setLoginError ] = useState(false);
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const setUser = (user) => {
+    dispatch(signIn(user));
+  };
 
   const login = (e) => {
     e.preventDefault();
     api.login().then(result => {
-      storageService.storeUser(result.data);
+      setUser(result.data);
       toast.success("Login successful");
       setLoginError(false);
       navigate("/");

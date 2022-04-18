@@ -1,15 +1,22 @@
-const user = null;
+import * as storageSerive from '../../services/storage';
+
+const user = storageSerive.loadUser();
 
 const handleUser = (state = user, action) => {
+  let updatedState;
   switch (action.type) {
     case "LOGIN":
-      return {
-        state: action.payload,
-      };
+      updatedState = action.payload;
+      storageSerive.storeUser(updatedState);
+      storageSerive.storeAccessToken(updatedState.accessToken);
+      storageSerive.storeRefreshToken(updatedState.refreshToken);
+      return updatedState;
       break;
 
     case "SIGNOUT":
-      return { state: action.payload };
+      updatedState = action.payload;
+      storageSerive.clearUserData();
+      return updatedState;
       break;
 
     default:

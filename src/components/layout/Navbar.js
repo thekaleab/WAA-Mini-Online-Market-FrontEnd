@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
-import { NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import { signOut } from "../../redux/action";
 
 function Navbar() {
   const state = useSelector((state) => state.handleCart);
-  const userState = useState({});
+  const userState = useSelector((userState) => userState.handleUser);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   
   const logout = () => {
-    // TODO logout
-  };
+    dispatch(signOut());
+    navigate('/');
+  }; 
 
   return (
     <div>
@@ -58,12 +62,35 @@ function Navbar() {
             </ul>
             <div className="buttons d-flex">
               <div className="btn d-flex align-items-center">
-                <NavLink to="/login" className="btn btn-outline-dark ms-2">
-                  <i className="fa fa-sign-in me-1 "></i> Login
-                </NavLink>
-                <NavLink to="/register" className="btn btn-outline-dark ms-2">
-                  <i className="fa fa-user-plus me-1"></i> Register
-                </NavLink>
+              {userState ? (
+                  <>
+                    <div>
+                      {userState?.firstName !== null
+                        ? userState?.firstName
+                        : userState?.email}
+                    </div>
+
+                    <NavLink to="/orders" className="btn btn-outline-dark ms-2">
+                      Orders
+                    </NavLink>
+                    <button
+                      type="button"
+                      className="btn btn-outline-dark ms-2"
+                      onClick={logout}
+                    >
+                      <i className="fa fa-sign-in me-1 "></i> Logout
+                    </button>
+                  </>
+                ): (
+                  <>
+                    <NavLink to="/login" className="btn btn-outline-dark ms-2">
+                      <i className="fa fa-sign-in me-1 "></i> Login
+                    </NavLink>
+                    <NavLink to="/register" className="btn btn-outline-dark ms-2">
+                      <i className="fa fa-user-plus me-1"></i> Register
+                    </NavLink>
+                  </>
+                )}
                 <NavLink to="/cart" className="btn btn-outline-dark ms-2">
                   <i className="fa fa-shopping-cart me-1"></i> Cart (
                   {state.length === 0 ? 0 : state.length})

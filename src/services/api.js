@@ -46,11 +46,9 @@ export const login = async (user) => {
                 id: 1,
                 name: "ADMIN"
             }                            
-        }
-    });
-    localStorage.setItem(AppConst.storage.accessToken, userDetail.accessToken);
-    localStorage.setItem(AppConst.storage.refreshToken, userDetail.refreshToken);
-    return userDetail;
+          
+        }});
+    return {data: userDetail};
 } catch (e) {
     Promise.reject(e);
 }
