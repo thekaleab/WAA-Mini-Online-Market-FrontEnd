@@ -11,6 +11,8 @@ import Order from '../components/order/Order';
 import Login from '../components/user/Login';
 import Signup from '../components/user/Signup';
 import Profile from '../components/user/Profile';
+import SellerProducts from '../components/product/SellerProducts';
+import SellerProduct from '../components/product/SellerProduct';
 
 const AppRoutes = 
     <Routes>
@@ -25,6 +27,8 @@ const AppRoutes =
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/seller/products" element={<SellerProducts /> } />
+        <Route path="/seller/products/:id" element={<SellerProduct /> } />
     </Routes>
 
 

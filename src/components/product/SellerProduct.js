@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import { NavLink, useParams } from "react-router-dom";
+import { toast } from 'react-toastify';
+import { Modal, Button } from 'react-bootstrap';
 
-import { ToastContainer, toast } from 'react-toastify';
+import ProductModal from './ProductModal';
 
 import * as api from '../../services/api';
 
-function Product() {
+function SellerProduct() {
   const { id } = useParams();
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
-  
-
-  const addProduct = (product) => {
-    // TODO
-  };
+  const [showModal, setShowModal ] = useState(false);
+  const [showDeleteModal, setShowDeleteModal ] = useState(false);
 
   useEffect(() => {
     const getProduct = async () => {
@@ -29,7 +28,7 @@ function Product() {
       }
     };
     getProduct();
-  }, []);
+  }, [id]);
 
   const Loading = () => {
     return (
@@ -71,24 +70,33 @@ function Product() {
           <p className="lead">{product.description}</p>
           
           <button
-            className="btn btn-outline-dark py-2 px-4"
-            onClick={() => addProduct(product)}
+            className="btn btn-outline-dark me-2 py-2 pe-4 ps-2"
+            onClick={() => setShowModal(true)}
           >
-              {" "}
-              Add to Cart
+              <i className="fa fa-pencil me-2"/>
+              Edit
           </button>
-            <NavLink to="/cart" className="btn btn-dark px-3 py-2 ms-2">
-              Go to Cart
-            </NavLink>
-          </div>
+          <button
+            className="btn btn-outline-dark  py-2 me-2 pe-4 ps-2"
+            onClick={() => setShowDeleteModal(true)}
+          >
+              <i className="fa fa-trash me-2" />
+              Delete
+          </button>
+          <NavLink to="/seller/products" className="btn btn-dark px-3 py-2 ms-2">
+            Back
+          </NavLink>
+          
+        </div>
       </>
     );
   };
-
   return (
     <div>
       <div className="container py-5 ">
         <div className="row py-5">
+          <ProductModal show={showModal} onHide={() => setShowModal(false)} product={product} mode='edit' />
+          <DeleteModal show={showDeleteModal} onHide={() => setShowDeleteModal(false) } />
           {loading ? <Loading /> : <ShowProduct />}
         </div>
       </div>
@@ -96,4 +104,28 @@ function Product() {
   );
 }
 
-export default Product;
+const DeleteModal = (props)  => {
+
+  const deleteProduct = () => {
+      // api to delete product.
+  }
+
+  return(
+      <Modal {...props} aria-labelledby="m_title" size="sm" centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Product ?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>You are about to delete a product</Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-outline-dark btn-sm  py-2 me-2 px-3" onClick={props.onHide}>
+            Cancel
+          </button>
+          <button className="btn btn-outline-dark btn-sm py-2 me-2 px-3" onClick={deleteProduct}>
+            Confirm
+          </button>
+        </Modal.Footer>
+      </Modal>
+  )
+}
+
+export default SellerProduct;
