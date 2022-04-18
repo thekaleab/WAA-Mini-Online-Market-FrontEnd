@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import * as AppConst from "../../services/constants";
+import * as userService from "../../services/user";
 import * as api from "../../services/api";
 
 function Signup() {
@@ -17,10 +17,9 @@ function Signup() {
     e.preventDefault(); 
     api.register(user)
       .then(result => {
-        localStorage.setItem(AppConst.storage.user, JSON.stringify(result.data));
-        setModal(false);
+        // redirect to login page.
         toast.success('Account successfully created');
-        navigate('/');
+        navigate('/login');
       })
       .catch(e => {
         toast.error("Can't create account now. please try again")
@@ -28,31 +27,10 @@ function Signup() {
   };
 
   return (
-    <>
-      <button
-        type="button"
-        className="btn btn-outline-dark ms-2 "
-        onClick={(e) => setModal(true)}
-      >
-        <i className="fa fa-user-plus me-1"></i> Register
-      </button>
-      {/* <!-- Modal --> */}
-      {modal === true && (
-        <>
-          <div className="formWrapper" onClick={() => setModal(false)} />
-          <div className="modal-content position-absolute ">
-            <div className="d-flex justify-content-end align-items-center mb-1 mt-2 me-2">
-              <button
-                type="button"
-                className="btn-close"
-                onClick={(e) => setModal(false)}
-              ></button>
-            </div>
-            <div className="modal-body ps-5 pe-5 pt-0 pb-3">
-              <h5
-                className="modal-title login-header text-center mb-3"
-                id="exampleModalLabel"
-              >
+        <div className="container py-4 my-4">
+          <div className="row justify-content-center align-items-center">
+            <div className="col-sm-5 col-md-3">
+              <h5 className="login-header text-center mb-3">
                 Register
               </h5>
               <form onSubmit={register}>
@@ -64,20 +42,20 @@ function Signup() {
                     type="text"
                     className="form-control"
                     id="username"
-                    aria-describedby="emailHelp"
+                    aria-describedby="usernameHelp"
                     required
                     value={user.username}
                     onChange={(e) => onChange('username', e.target.value)}
                   />
                 </div>
                 <div className="mb-3 text-start">
-                  <label htmlFor="exampleInputEmail1" className="form-label">
+                  <label htmlFor="email" className="form-label">
                     Email address
                   </label>
                   <input
                     type="email"
                     className="form-control"
-                    id="exampleInputEmail1"
+                    id="email"
                     aria-describedby="emailHelp"
                     required
                     value={user.email}
@@ -131,10 +109,8 @@ function Signup() {
               </form>
             </div>
           </div>
-        </>
-      )}
-    </>
-  );
+        </div>
+      );
 }
 
 const useRoles = () => {
@@ -161,6 +137,10 @@ const useUser = () => {
   const [user, setUser] = useState(emptyUser);
 
   const onChange = (target, value) => {
+    if(value === null || value === undefined) {
+      value = '';
+    }
+
     setUser(prev => {
       return {...prev, [target]: value}
     });

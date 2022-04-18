@@ -8,6 +8,8 @@ import Cart from '../components/cart/Cart';
 import Checkout from '../components/cart/Checkout';
 import Orders from '../components/order/Orders';
 import Order from '../components/order/Order';
+import Login from '../components/user/Login';
+import Signup from '../components/user/Signup';
 
 const AppRoutes = 
     <Routes>
@@ -19,6 +21,8 @@ const AppRoutes =
         <Route path="/checkout" element={<Checkout/>} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/orders/:id" element={<Order />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Signup />} />
     </Routes>
 
 

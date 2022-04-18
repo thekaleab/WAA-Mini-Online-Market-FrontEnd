@@ -1,5 +1,6 @@
 import { httpReq as api } from "./http";
 import * as AppConst from './constants';
+import * as userService from './user';
 
 
 // Product end points
@@ -46,16 +47,7 @@ export const login = async (user) => {
 }
 };
 export const register = async (user) => {  
-    return Promise.resolve({ data: {
-            firstName: "Abenezer", lastName: "Mamuyea",
-            accessToken: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY1MDIyNzI4NiwiaWF0IjoxNjUwMjIxMjg2fQ.ev4oJMpYb30MOHR6b9phBeo6uWLryS8hUgWOkisBFRIOwC8zawDGhEjEkMjtsS7O33ZU96_b_ivZpp-nhOAjRA",
-            refreshToken: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY1MDIyNzI4NiwiaWF0IjoxNjUwMjIxMjg2fQ.ev4oJMpYb30MOHR6b9phBeo6uWLryS8hUgWOkisBFRIOwC8zawDGhEjEkMjtsS7O33ZU96_b_ivZpp-nhOAjRA",
-            role: {
-                id: 1,
-                name: "ADMIN"
-            }                            
-        }
-    });
+    return Promise.resolve();
 }
 
 export const logout = (user) => api.post(`${authRoute}/logout`, user);
@@ -67,8 +59,8 @@ export const refreshToken = async () => {
     }
     try {
         const response =  await api.post(`${authRoute}/refreshToken`, token);
-        localStorage.setItem(AppConst.storage.accessToken, response.accessToken);
-        localStorage.setItem(AppConst.storage.refreshToken, response.refreshToken);
+        userService.storeAccessToken(response.accessToken);
+        userService.storeRefreshToken(response.refreshToken);
     } catch(e) {
         Promise.reject("Refresh token can't be generated, loging again");
     }

@@ -1,109 +1,153 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+
+import * as userService from "../../services/user";
+import * as api from "../../services/api";
 
 import "./Login.css";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [modal, setModal] = useState(false);
-  const navigate = useNavigate();
 
-  const handleAuth = () => {
-      // TODO
-  };
+  const [user, onChange] = useUser();
+  const roles = useRoles();
+  const [ loginError, setLoginError ] = useState(false);
+
+  const navigate = useNavigate();
 
   const login = (e) => {
     e.preventDefault();
-    // TODO
-  };
-
-  const setUser = (user) => {
-    // TODO
+    api.login().then(result => {
+      userService.storeUser(result.data);
+      toast.success("Login successful");
+      setLoginError(false);
+      navigate("/");
+    }).catch(err => {
+        toast("Incorrect credentials");
+        setLoginError(true);
+    });
   };
 
   return (
-    <>
-      <button
-        type="button"
-        className="btn btn-outline-dark"
-        onClick={(e) => setModal(true)}
-      >
-        <i className="fa fa-sign-in me-1 "></i> Login
-      </button>
-      {modal === true && (
-        <>
-          <div className="formWrapper" onClick={() => setModal(false)} />
-
-          <div className="modal-content position-absolute">
-            <div className="d-flex justify-content-end align-items-center mb-1 mt-4 me-4">
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-                onClick={() => setModal(false)}
-              ></button>
-            </div>
-            <div className="modal-body ps-5 pe-5 pt-0 pb-3">
-              <h5
-                className="modal-title login-header text-center mb-5"
-                id="exampleModalLabel"
-              >
-                Login to your account
-              </h5>
-              <form onSubmit={login}>
-                <div className="mb-3 text-start">
-                  <label htmlFor="exampleInputEmail1" className="form-label">
-                    Email address
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <div id="emailHelp" className="form-text">
-                    We'll never share your email with anyone else.
+          <div className="container py-4 my-4">
+            <div className="row justify-content-center align-content-center">
+              <div className="col-sm-5 col-md-3">
+                <h5 className="login-header text-center mb-3">
+                  Login to your account
+                </h5>
+                <form onSubmit={login}>
+                  <div className="mb-3 text-start">
+                    <label htmlFor="email" className="form-label">
+                      Email address
+                    </label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="email"
+                      aria-describedby="emailHelp"
+                      required
+                      value={user.email}
+                      onChange={(e) => onChange('email', e.target.value)}
+                    />
+                    <div id="emailHelp" className="form-text">
+                      We'll never share your email with anyone else.
+                    </div>
                   </div>
-                </div>
-                <div className="mb-3 text-start">
-                  <label htmlFor="exampleInputPassword1" className="form-label">
-                    Password
+                  <div className="mb-3 text-start">
+                    <label htmlFor="password" className="form-label">
+                      Password
+                    </label>
+                    <input
+                      required
+                      type="password"
+                      className="form-control"
+                      id="password"
+                      value={user.password}
+                      onChange={(e) => onChange('password', e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-3 text-start">
+                    <label htmlFor="role" className="form-label">
+                      I want to 
+                    </label>
+                    <select required
+                      className="form-control"
+                      id="role"
+                      onChange={(e) => onChange('role_id', e.target.value)}
+                    > 
+                      {
+                        roles.map(role => <option key={role.id} value={role.id}>{role.name}</option>)
+                      }
+                    </select>
+                  </div>
+                  <div className="mb-3 form-check text-start">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="exampleCheck1"
+                      required
+                    />
+                    <label className="form-check-label" htmlFor="exampleCheck1">
+                      I agree the terms and conditions
+                    </label>
+                  </div>
+                  { 
+                    loginError === true && 
+                    <div id="formError" className="form-text text-danger">
+                      Invalid credentials, please check and try again.
+                    </div>
+                  }
+                  <button type="submit" className="btn btn-dark w-100 mt-2 mb-3">
+                    Submit
+                  </button>
+
+                  
+                  <label className="form-label" htmlFor="register">
+                    Don't have an account?
                   </label>
-                  <input
-                    required
-                    type="password"
-                    className="form-control"
-                    id="exampleInputPassword1"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <div className="mb-3 form-check text-start">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    id="exampleCheck1"
-                    required
-                  />
-                  <label className="form-check-label" htmlFor="exampleCheck1">
-                    I agree the terms and conditions
-                  </label>
-                </div>
-                <button type="submit" className="btn btn-dark w-100 mt-5 mb-3">
-                  Submit
-                </button>
-              </form>
+                  <button id="register" 
+                          className="btn btn-dark w-100 mt-1 mb-3"
+                          onClick={() => navigate('/register')}
+                  >
+                      Regiter
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
-        </>
-      )}
-    </>
-  );
+      )
+}
+
+const useRoles = () => {
+  const [roles, setRoles] = useState([]);
+
+  useEffect(() => {
+        api.getRoles().then(result => {
+          setRoles(result.data);
+        }).catch(e => {
+          toast.error("Network error, please reload page");
+        });
+  }, []);
+
+  return roles;
+}
+
+const useUser = () => {
+    const emptyUser = {
+      username: '',
+      password: '',
+      role_id: ''
+    };
+   const [user, setUser] = useState(emptyUser);
+
+   const onChange = (target, value) => {
+     setUser(prev => {
+       return { ...prev, [target]: value };
+     });
+   }
+
+   return [user, onChange];
 }
 
 export default Login;
