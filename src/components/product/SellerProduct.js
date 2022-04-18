@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import { NavLink, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 
 import ProductModal from './ProductModal';
 
