@@ -1,6 +1,10 @@
 import * as storageService from '../../services/storage';
 
+<<<<<<< HEAD
 const cart = storageService.loadCart() ? storageService.loadCart() : [];
+=======
+const cart = storageService.loadCart() ? storageService.loadCart(): [];
+>>>>>>> 1c66293... Random
 
 //Selector
 export const getBasketTotal = (state) =>

@@ -1,6 +1,6 @@
 import * as storageSerive from '../../services/storage';
 
-const user = storageSerive.loadUser();
+const user = storageSerive.loadUser() ? storageSerive.loadUser() : {}
 
 const handleUser = (state = user, action) => {
   let updatedState;
