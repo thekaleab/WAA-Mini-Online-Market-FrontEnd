@@ -6,7 +6,7 @@ import  * as AppConst  from './constants';
 
 const httpReq = axios.create({
     baseURL: AppConst.api.baseURL,
-    timeout: 1000,
+    timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'

@@ -58,14 +58,14 @@ function Product() {
         <div className="col-md-6">
           <img
             src={product.image}
-            alt={product.title}
+            alt={product.name}
             height="400px"
             width="400px"
           />
         </div>
         <div className="col-md-6">
           <h4 className="text-uppercase text-black-50"> {product.category}</h4>
-          <h1 className="display-5">{product.title}</h1>
+          <h1 className="display-5">{product.name}</h1>
           <p className="lead fw-bolder">
             Rating {product.rating && product.rating.rate}
             <i className="fa fa-star"></i>

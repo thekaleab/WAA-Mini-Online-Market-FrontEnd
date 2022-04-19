@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
-import { NavLink, useParams } from "react-router-dom";
+import { useNavigate, NavLink, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { Modal } from 'react-bootstrap';
 
@@ -14,6 +14,7 @@ function SellerProduct() {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal ] = useState(false);
   const [showDeleteModal, setShowDeleteModal ] = useState(false);
+  const [ refreshProduct, setRefreshProduct ] = useState(false);
 
   useEffect(() => {
     const getProduct = async () => {
@@ -28,7 +29,7 @@ function SellerProduct() {
       }
     };
     getProduct();
-  }, [id]);
+  }, [id, refreshProduct]);
 
   const Loading = () => {
     return (
@@ -54,14 +55,14 @@ function SellerProduct() {
         <div className="col-md-6">
           <img
             src={product.image}
-            alt={product.title}
+            alt={product.name}
             height="400px"
             width="400px"
           />
         </div>
         <div className="col-md-6">
           <h4 className="text-uppercase text-black-50"> {product.category}</h4>
-          <h1 className="display-5">{product.title}</h1>
+          <h1 className="display-5">{product.name}</h1>
           <p className="lead fw-bolder">
             Rating {product.rating && product.rating.rate}
             <i className="fa fa-star"></i>
@@ -95,8 +96,11 @@ function SellerProduct() {
     <div>
       <div className="container py-5 ">
         <div className="row py-5">
-          <ProductModal show={showModal} onHide={() => setShowModal(false)} product={product} mode='edit' />
-          <DeleteModal show={showDeleteModal} onHide={() => setShowDeleteModal(false) } />
+          <ProductModal show={showModal} 
+                        onHide={() => setShowModal(false)} 
+                        product={product} mode='edit' 
+                        onSuccess={()=>setRefreshProduct(!refreshProduct)} />
+          <DeleteModal id={product.id} show={showDeleteModal} onHide={() => setShowDeleteModal(false) } />
           {loading ? <Loading /> : <ShowProduct />}
         </div>
       </div>
@@ -105,9 +109,17 @@ function SellerProduct() {
 }
 
 const DeleteModal = (props)  => {
+  const navigate = useNavigate();
 
   const deleteProduct = () => {
-      // api to delete product.
+      api.deleteProduct(props.id)
+        .then(result => {
+            toast.success("Product delete");
+            navigate('/seller/products');
+        })
+        .catch(error => {
+            toast.error("Can't delete product");
+        });
   }
 
   return(

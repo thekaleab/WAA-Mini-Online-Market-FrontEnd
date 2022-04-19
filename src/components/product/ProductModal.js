@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Modal } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import { navigate, useNavigate } from 'react-router-dom';
 
 import * as api from '../../services/api';
 
@@ -7,8 +9,10 @@ export default function ProductModal(props) {
 
     const [product, setProduct] = useState(props.product);
     const imageRef = useRef();
+    const navigate = useNavigate();
+
     const emptyProduct = {
-        title: '',
+        name: '',
         category: '',
         image: '',
         quantity: 0,
@@ -39,11 +43,30 @@ export default function ProductModal(props) {
   
     const onSubmit = (e) => {
         e.preventDefault();
-        onChange('image', imageRef.current.files[0]?.name);
+        
         if(props.mode == 'edit') {
-            //call edit api here.
+          const updatedImage = imageRef.current.files[0]?.name;
+          const productDto = {...product, image: updatedImage ? updatedImage: product.image};
+          api.updateProduct(productDto)
+          .then(result => {
+              const productRes = result.data;
+              toast.success('Product successfully updated!');
+              props.onSuccess();
+              props.onHide();
+          }).catch(error => {
+              toast.error("Can't update product, please check and try again!");
+          })
         } else {
-            // call add api here.
+          const productDto = {...product, image: imageRef.current.files[0]?.name }
+          api.createProduct(productDto)
+          .then(result => {
+              const productRes = result.data;
+              toast.success('Product successfully created!');
+              navigate(`/seller/products/${productRes.id}`);
+          })
+          .catch(error => {
+            toast.error("Can't create product, please check and try again!");
+          });
         }
         return false;
     }
@@ -70,8 +93,8 @@ export default function ProductModal(props) {
                         id="title"
                         aria-describedby="titleHelp"
                         required
-                        value={product.title}
-                        onChange={(e) => onChange('title', e.target.value)}
+                        value={product.name}
+                        onChange={(e) => onChange('name', e.target.value)}
                       />
                       <div id="titleHelp" className="form-text">
                          {}
@@ -166,7 +189,7 @@ export default function ProductModal(props) {
                     </div>
                   </div>
                   <div className="col-4 offset-4">
-                      <button  onClick={onSubmit} className="btn btn-dark w-100 mt-5 mb-3">
+                      <button type="submit" className="btn btn-dark w-100 mt-5 mb-3">
                            {props.mode == 'edit' ? 'Update':  'Add'} 
                       </button>
                   </div>

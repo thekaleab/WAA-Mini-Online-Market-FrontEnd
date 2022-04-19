@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { NavLink } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { useSelector } from "react-redux";
 
 import * as api from '../../services/api';
 import ProductModal from "./ProductModal";
@@ -11,11 +12,16 @@ function Products() {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  const user = useSelector((state) => state.handleUser);
+
   useEffect(() => {
     const getProducts = async () => {
       try {
         setLoading(true);
-        const response = await api.getProducts()
+        if(user?.id === null || user?.id === undefined) {
+            throw 'Seller ID not found';
+        }
+        const response = await api.getSellerProduct(user?.id)
         setProducts(await response.data);
       } catch(e) {
         toast.error('Error occured, please refresh page');
@@ -58,13 +64,13 @@ function Products() {
                 <div className="card h-100 text-center p-4">
                   <img
                     src={product.image}
-                    alt={product.title}
+                    alt={product.name}
                     height="250px"
                     className="card-img-top"
                   />
                   <div className="card-body">
                     <h5 className="card-title mb-0">
-                      {product.title.substring(0, 12)}...
+                      {product.name.substring(0, 12)}...
                     </h5>
                     <p className="card-text lead fw-bold">${product.price}</p>
                     <NavLink

@@ -7,17 +7,32 @@ import fake_products from "./fake_products";
 
 // Product end points
 const productRoute = AppConst.api.productRoute;
-// const getProducts = () => httpReq.get(productRoute);
-// const getProductById = (id) => httpReq.get(`${productRoute}/${id}`);
-export const getProducts = () => Promise.resolve({data: fake_products});
-export const getProductById = (id) =>{  
-    const product = fake_products.find(p => p.id == id);
-    if(product !== null || product !== undefined) {
-        return Promise.resolve({data: product });
-    } else {
-        return Promise.reject();
+
+export const getProducts = async () => { 
+        const data = await httpReq.get(productRoute)
+            .then(result => {
+               return result
+            })
+            .catch(error => {
+                Promise.resolve({data: fake_products});
+            });
+        return data;
     }
+
+export const getProductById = (id) => { 
+    return httpReq.get(`${productRoute}/${id}`)
+        .then(result => result)
+        .catch(error => {
+            const product = fake_products.find(p => p.id == id);
+            if(product !== null || product !== undefined) {
+                return Promise.resolve({data: product });
+            } else {
+                return Promise.reject();
+            }
+        });
 }
+
+export const getSellerProduct = (id) => httpReq.get(`${productRoute}/seller/${id}`);
 export const createProduct = (product) => httpReq.post(productRoute, product);
 export const updateProduct = (product) => httpReq.put(`${productRoute}/${product.id}`, product);
 export const deleteProduct = (id) => httpReq.delete(`${productRoute}/${id}`);
@@ -39,6 +54,7 @@ export const cancelOrder = (id) => httpReq.post(`${orderRoute}/cancel/${id}`);
 // user
 const userRoute = AppConst.api.userRoute;
 export const register = (user) => httpReq.post(userRoute, user);
+export const getUser = (id) => httpReq.get(`${userRoute}/${id}`);
 
 
 // Authorization end points
