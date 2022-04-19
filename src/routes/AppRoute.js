@@ -17,6 +17,9 @@ import SellerProducts from '../components/product/SellerProducts';
 import SellerProduct from '../components/product/SellerProduct';
 import Admin from '../components/admin/Admin';
 
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import Admin from '../components/admin/Admin';
 
 const promise = loadStripe(
     "pk_test_TYooMQauvdEDq54NiTphI7jx"
@@ -43,6 +46,8 @@ const AppRoutes =
         <Route path="/profile" element={<Profile />} />
         <Route path="/seller/products" element={<SellerProducts /> } />
         <Route path="/seller/products/:id" element={<SellerProduct /> } />
+
+        <Route path="/admin" element={<Admin /> } />
     </Routes>
 
 

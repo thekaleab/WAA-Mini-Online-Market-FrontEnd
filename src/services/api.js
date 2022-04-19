@@ -50,15 +50,7 @@ export const cancelOrder = (id) => httpReq.post(`${orderRoute}/cancel/${id}`);
 // Cart end points
 
 
-
-
-// user
-const userRoute = AppConst.api.userRoute;
-export const register = (user) => httpReq.post(userRoute, user);
-export const getUser = (id) => httpReq.get(`${userRoute}/${id}`);
-
-
-// Authorization end points
+// authorization end points
 const authRoute = AppConst.api.authRoute;
 export const login = (user) => { 
     return httpReq.post(authRoute, user)
@@ -93,6 +85,15 @@ export const refreshToken = async () => {
     }
 }
 
+// User end points
+const userRoute = AppConst.api.userRoute;
+export const getUsers = () => httpReq.get(userRoute);
+export const getUserById = (id) => httpReq.get(`${userRoute}/${id}`);
+
+
+// review end points
+const reviewRoute = AppConst.api.reviewRoute;
+export const getReviews = () => httpReq.get(reviewRoute);
 
 // roles
 const roleRoute = AppConst.api.roleRoute;

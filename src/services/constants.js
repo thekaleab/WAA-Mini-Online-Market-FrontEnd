@@ -11,7 +11,8 @@ const  api = {
     productRoute: '/products', 
     authRoute: '/authenticate',
     roleRoute: '/roles',
-    userRoute: '/users'
+    userRoute: '/users',
+    reviewRoute: '/reviews'
 };
 
 
