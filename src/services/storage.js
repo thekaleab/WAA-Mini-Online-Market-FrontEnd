@@ -35,6 +35,8 @@ export const loadRefreshToken = () => {
 
 export const clearUserData = () => {
     localStorage.removeItem(AppConst.storage.user);
+    localStorage.removeItem(AppConst.storage.accessToken);
+    localStorage.removeItem(AppConst.storage.refreshToken);
 }
 
 
