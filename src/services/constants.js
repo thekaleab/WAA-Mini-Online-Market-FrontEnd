@@ -6,13 +6,14 @@ const storage = {
 }
 
 const  api = {
-    baseURL: 'http://172.24.192.1:8080/api/v1',
+    baseURL: 'http://172.24.192.1:8081/api/v1',
     orderRoute: '/orders',
     productRoute: '/products', 
     authRoute: '/authenticate',
     roleRoute: '/roles',
     userRoute: '/users',
-    reviewRoute: '/reviews'
+    reviewRoute: '/reviews',
+    imageAsset: 'http://172.24.192.1:8081/static/images'
 };
 
 

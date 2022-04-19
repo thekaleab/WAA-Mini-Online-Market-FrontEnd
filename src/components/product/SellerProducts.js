@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from "react-redux";
 
 import * as api from '../../services/api';
+import * as AppConst from "../../services/constants";
 import ProductModal from "./ProductModal";
 
 function Products() {
@@ -63,7 +64,7 @@ function Products() {
               <div className="col-md-3 mb-4">
                 <div className="card h-100 text-center p-4">
                   <img
-                    src={product.image}
+                    src={`${AppConst.api.imageAsset}/${product.imgUrl}`}
                     alt={product.name}
                     height="250px"
                     className="card-img-top"

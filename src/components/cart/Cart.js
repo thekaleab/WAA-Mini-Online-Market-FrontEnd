@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { deleteCart } from "../../redux/action";
+import * as AppConst from "../../services/constants";
 
 
 function Cart() {
@@ -40,7 +41,7 @@ function Cart() {
           <div className="row justify-content-center">
             <div className="col-md-4">
               <img
-                src={product.image}
+                src={`${AppConst.api.imageAsset}/${product.imgUrl}`}
                 alt={product.name}
                 height="200px"
                 width="180px"

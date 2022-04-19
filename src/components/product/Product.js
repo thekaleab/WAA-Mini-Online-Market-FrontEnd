@@ -4,6 +4,8 @@ import { NavLink, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 
+import * as AppConst from "../../services/constants";
+
 import { addCart } from "../../redux/action";
 
 import * as api from '../../services/api';
@@ -53,11 +55,12 @@ function Product() {
   };
 
   const ShowProduct = () => {
+    const imgUrl = `${AppConst.api.imageAsset}/${product.imgUrl}`;
     return (
       <>
         <div className="col-md-6">
           <img
-            src={product.image}
+            src={ imgUrl}
             alt={product.name}
             height="400px"
             width="400px"

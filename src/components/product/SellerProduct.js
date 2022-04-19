@@ -7,6 +7,7 @@ import { Modal } from 'react-bootstrap';
 import ProductModal from './ProductModal';
 
 import * as api from '../../services/api';
+import * as AppConst from "../../services/constants";
 
 function SellerProduct() {
   const { id } = useParams();
@@ -54,7 +55,7 @@ function SellerProduct() {
       <>
         <div className="col-md-6">
           <img
-            src={product.image}
+            src={`${AppConst.api.imageAsset}/${product.imgUrl}`}
             alt={product.name}
             height="400px"
             width="400px"

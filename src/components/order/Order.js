@@ -1,6 +1,7 @@
 import moment from "moment";
 import React from "react";
 import CurrencyFormat from "react-currency-format";
+import * as AppConst from "../../services/constants";
 
 function Order({ order }) {
 
@@ -26,7 +27,7 @@ function Order({ order }) {
         <div className="row mb-3 p-3 d-flex align-items-center order-item">
           <img
             className="col-2"
-            src={item?.product.img}
+            src={`${AppConst.api.imageAsset}/${item?.product.imgUrl}`}
             alt=""
             width="100px"
             height="100px"

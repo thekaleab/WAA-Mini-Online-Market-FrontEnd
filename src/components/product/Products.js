@@ -3,6 +3,8 @@ import Skeleton from "react-loading-skeleton";
 import { NavLink } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 
+import * as AppConst from "../../services/constants";
+
 import * as api from '../../services/api';
 
 function Products() {
@@ -95,7 +97,7 @@ function Products() {
               <div className="col-md-3 mb-4">
                 <div className="card h-100 text-center p-4">
                   <img
-                    src={product.image}
+                    src={`${AppConst.api.imageAsset}/${product.imgUrl}`}
                     alt={product.name}
                     height="250px"
                     className="card-img-top"

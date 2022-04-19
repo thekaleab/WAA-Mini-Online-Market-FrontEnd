@@ -89,6 +89,7 @@ export const refreshToken = async () => {
 const userRoute = AppConst.api.userRoute;
 export const getUsers = () => httpReq.get(userRoute);
 export const getUserById = (id) => httpReq.get(`${userRoute}/${id}`);
+export const register = (user) => httpReq.post(userRoute, user);
 
 
 // review end points
