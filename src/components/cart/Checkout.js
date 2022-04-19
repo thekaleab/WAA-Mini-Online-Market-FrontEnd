@@ -70,7 +70,7 @@ function Checkout() {
 
   const prepareOrder = () => {
       const order = state.map(orderItem => {
-        return { id: orderItem.id, quantity: orderItem.qty}
+        return { productId: orderItem.id, quantity: orderItem.qty}
       })
 
       return {

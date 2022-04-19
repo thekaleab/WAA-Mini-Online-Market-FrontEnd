@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+
 import Order from "./Order";
+import * as api from "../../services/api";
 
 function Orders() {
-  const userState = useState(null);
+  const userState = useSelector((userState) => userState.handleUser);
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     if (userState) {
-      // TODO
+      api.getUserOrders(userState.id)
+          .then(result => setOrders(result.data))
+          .catch(error => setOrders([]));
     } else {
       setOrders([]);
     }
@@ -19,7 +24,7 @@ function Orders() {
       {orders.length > 0 ? (
         <div className="">
           {orders?.map((order) => (
-            <Order order={order} />
+            <Order key={order.key} order={order} />
           ))}
         </div>
       ) : (

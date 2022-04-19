@@ -41,6 +41,7 @@ export const deleteProduct = (id) => httpReq.delete(`${productRoute}/${id}`);
 const orderRoute = AppConst.api.orderRoute;
 export const getOrders = () => httpReq.get(orderRoute);
 export const getOrderById = (id) => httpReq.get(`${orderRoute}/${id}`);
+export const getUserOrders = (id) => httpReq.get(`${orderRoute}/buyer/${id}`);
 export const updateOrder = (order) => httpReq.put(`${orderRoute}/${order.id}`, order);
 export const createOrder = (order) => httpReq.post(orderRoute, order);
 export const cancelOrder = (id) => httpReq.post(`${orderRoute}/cancel/${id}`);
