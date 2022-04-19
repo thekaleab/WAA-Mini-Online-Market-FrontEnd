@@ -1,6 +1,6 @@
 import * as storageService from '../../services/storage';
 
-const cart = storageService.loadCart();
+const cart = storageService.loadCart() ? storageService.loadCart() : [];
 
 //Selector
 export const getBasketTotal = (state) =>

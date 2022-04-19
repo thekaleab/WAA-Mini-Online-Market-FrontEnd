@@ -61,7 +61,7 @@ export const getUser = (id) => httpReq.get(`${userRoute}/${id}`);
 const authRoute = AppConst.api.authRoute;
 export const login = (user) => { 
     return httpReq.post(authRoute, user)
-            .then(response => response.data)
+            .then(response => response)
             .catch(error => {
                 Promise.resolve( { data: {
                         firstName: "Abenezer", lastName: "Mamuyea",

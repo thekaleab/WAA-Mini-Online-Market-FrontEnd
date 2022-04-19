@@ -47,7 +47,8 @@ function Checkout() {
       .then(({ paymentIntent }) => {
         setProcessing(false);
         setSucceeded(true);
-        api.createOrder({items: state}).then(res => {
+        // create orderarray here.
+        api.createOrder(prepareOrder()).then(res => {
           toast.success('Order successful placed');
           dispatch({
             type: "EMPTYCART",
@@ -66,6 +67,16 @@ function Checkout() {
         // setError(error);
       });
   };
+
+  const prepareOrder = () => {
+      const order = state.map(orderItem => {
+        return { id: orderItem.id, quantity: orderItem.qty}
+      })
+
+      return {
+        order
+      }
+  }
 
   const handleChange = (event) => {
     
