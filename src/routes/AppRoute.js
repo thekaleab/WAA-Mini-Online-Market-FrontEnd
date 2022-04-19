@@ -1,4 +1,6 @@
 import { Route,  Routes } from 'react-router-dom';
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 import Home from '../components/layout/Home';
 import About from '../components/layout/About';
@@ -13,9 +15,8 @@ import Signup from '../components/user/Signup';
 import Profile from '../components/user/Profile';
 import SellerProducts from '../components/product/SellerProducts';
 import SellerProduct from '../components/product/SellerProduct';
+import Admin from '../components/admin/Admin';
 
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
 
 const promise = loadStripe(
     "pk_test_TYooMQauvdEDq54NiTphI7jx"
@@ -34,6 +35,7 @@ const AppRoutes =
                                     </Elements>   
                                 } 
         />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/orders/:id" element={<Order />} />
         <Route path="/login" element={<Login />} />

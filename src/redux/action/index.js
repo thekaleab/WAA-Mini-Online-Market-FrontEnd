@@ -26,6 +26,13 @@ export const signIn = (user) => {
   };
 };
 
+export const register = (user) => {
+  return {
+    type: "REGISTER",
+    payload: user
+  }
+}
+
 export const signOut = () => {
   return {
     type: "SIGNOUT",

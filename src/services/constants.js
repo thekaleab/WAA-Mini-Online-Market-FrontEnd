@@ -6,11 +6,12 @@ const storage = {
 }
 
 const  api = {
-    baseURL: 'http://172.28.160.1:8080/api/v1',
+    baseURL: 'http://172.24.192.1:8080/api/v1',
     orderRoute: '/orders',
     productRoute: '/products', 
-    authRoute: '/auth',
-    roleRoute: '/roles'
+    authRoute: '/authenticate',
+    roleRoute: '/roles',
+    userRoute: '/users'
 };
 
 

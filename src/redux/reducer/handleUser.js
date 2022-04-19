@@ -19,6 +19,12 @@ const handleUser = (state = user, action) => {
       return updatedState;
       break;
 
+    case "REGISTER":
+      updatedState = action.payload;
+      storageSerive.storeUser(updatedState);
+      return updatedState;
+      break;
+
     default:
       return state;
       break;

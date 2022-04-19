@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 
-import * as storageService from "../../services/storage";
+
+import { register } from "../../redux/action";
 import * as api from "../../services/api";
 
 function Signup() {
-  const [modal, setModal] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const roles = useRoles();
-
   const [user, onChange] = useUser();
   
-  const register = (e) => {
+  const createUser = (e) => {
     e.preventDefault(); 
-    api.register(user)
+    const userDto = {...user, role_id: null, role: roles.find(role => role.id == user.role_id)}
+    api.register(userDto)
       .then(result => {
-        // redirect to login page.
+        dispatch(register(userDto));
         toast.success('Account successfully created');
         navigate('/login');
       })
-      .catch(e => {
+      .catch(error => {
         toast.error("Can't create account now. please try again")
       });
   };
+
 
   return (
         <div className="container py-4 my-4">
@@ -33,20 +36,39 @@ function Signup() {
               <h5 className="login-header text-center mb-3">
                 Register
               </h5>
-              <form onSubmit={register}>
+              <form onSubmit={createUser}>
                 <div className="mb-3 text-start">
                   <label htmlFor="username" className="form-label">
-                    Username
+                    First Name
                   </label>
                   <input
                     type="text"
                     className="form-control"
                     id="username"
-                    aria-describedby="usernameHelp"
+                    aria-describedby="firstNameHelp"
                     required
-                    value={user.username}
-                    onChange={(e) => onChange('username', e.target.value)}
+                    value={user.firstName}
+                    onChange={(e) => onChange('firstName', e.target.value)}
                   />
+                  <div id="firstNameHelp" className="form-text">
+                  </div>
+                </div>
+                <div className="mb-3 text-start">
+                  <label htmlFor="username" className="form-label">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="lastName"
+                    aria-describedby="lastNameHelp"
+                    required
+                    value={user.lastName}
+                    onChange={(e) => onChange('lastName', e.target.value)}
+                  />
+                   <div id="lastNameHelp" className="form-text">
+                  
+                  </div>
                 </div>
                 <div className="mb-3 text-start">
                   <label htmlFor="email" className="form-label">
@@ -85,6 +107,7 @@ function Signup() {
                   <select required
                     className="form-control"
                     id="role"
+                    selected={user.role_id}
                     onChange={(e) => onChange('role_id', e.target.value)}
                   > 
                     {
@@ -103,7 +126,7 @@ function Signup() {
                     I agree the terms and conditions
                   </label>
                 </div>
-                <button type="submit" className="btn btn-dark w-100 mt-3 mb-4">
+                <button className="btn btn-dark w-100 mt-3 mb-4">
                   Register
                 </button>
               </form>
@@ -120,7 +143,7 @@ const useRoles = () => {
         api.getRoles().then(result => {
           setRoles(result.data);
         }).catch(e => {
-          toast.error("Network error, please reload page");
+          toast.error("Network error, please reload page and try again");
         });
   }, []);
 
@@ -129,21 +152,22 @@ const useRoles = () => {
 
 const useUser = () => {
   const emptyUser = {
-    username: '',
+    firstName: '',
+    lastName: '',
+    email: '',
     password: '',
-    role_id: ''
+    role_id: 2
   };
 
   const [user, setUser] = useState(emptyUser);
 
   const onChange = (target, value) => {
-    if(value === null || value === undefined) {
-      value = '';
-    }
-
     setUser(prev => {
-      return {...prev, [target]: value}
-    });
+      return {
+        ...prev, [target]: value
+      }
+    
+    })
   }
 
   return [user, onChange]

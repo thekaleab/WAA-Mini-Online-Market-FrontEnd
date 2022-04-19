@@ -1,23 +1,32 @@
 import * as AppConst from "./constants";
 
-export const storeUser = (user) => {
-    localStorage.setItem(AppConst.storage.user, JSON.stringify(user));
+export const storeUser = (data) => {
+    if(data === null || data === undefined) {
+        return
+    }
+    localStorage.setItem(AppConst.storage.user, JSON.stringify(data));  
 }
 
 export const loadUser = () => {
     return JSON.parse(localStorage.getItem(AppConst.storage.user));
 }
 
-export const storeAccessToken = (token) => {
-    localStorage.setItem(AppConst.storage.accessToken, token);
+export const storeAccessToken = (data) => {
+    if(data === null || data === undefined) {
+        return
+    }
+    localStorage.setItem(AppConst.storage.accessToken, data);
 }
 
 export const loadAccessToken = () => {
     return localStorage.getItem(AppConst.storage.accessToken);
 }
 
-export const storeRefreshToken = (token) => {
-    localStorage.setItem(AppConst.storage.refreshToken, token);
+export const storeRefreshToken = (data) => {
+    if(data === null || data === undefined) {
+        return
+    }
+    localStorage.setItem(AppConst.storage.refreshToken, data);
 }
 
 export const loadRefreshToken = () => {
@@ -29,8 +38,11 @@ export const clearUserData = () => {
 }
 
 
-export const storeCart = (cart) => {
-    localStorage.setItem(AppConst.storage.cart, JSON.stringify(cart));
+export const storeCart = (data) => {
+    if(data === null || data === undefined) {
+        return
+    }
+    localStorage.setItem(AppConst.storage.cart, JSON.stringify(data));
 }
 
 export const loadCart = () => {

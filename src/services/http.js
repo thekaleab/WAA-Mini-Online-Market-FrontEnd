@@ -3,10 +3,6 @@ import axios from "axios";
 import { corsInterceptor, authInterceptor } from "./interceptors";
 import  * as AppConst  from './constants';
 
-const paymentApi = axios.create( {
-    baseURL: '/payments',
-    timeout: 1000,
-});
 
 const httpReq = axios.create({
     baseURL: AppConst.api.baseURL,
@@ -49,4 +45,4 @@ setResponseInterceptor(httpReq);
 setAuthHeaderInterceptor(httpReq);
 
 
-export { httpReq, paymentApi };
+export { httpReq };

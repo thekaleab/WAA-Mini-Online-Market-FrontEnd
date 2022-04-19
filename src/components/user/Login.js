@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signIn } from "../../redux/action";
 
 import * as api from "../../services/api";
@@ -9,7 +9,6 @@ import * as api from "../../services/api";
 import "./Login.css";
 
 function Login() {
-
   const [user, onChange] = useUser();
   const roles = useRoles();
   const [ loginError, setLoginError ] = useState(false);
@@ -23,13 +22,13 @@ function Login() {
 
   const login = (e) => {
     e.preventDefault();
-    api.login().then(result => {
+    api.login(user).then(result => {
       setUser(result.data);
       toast.success("Login successful");
       setLoginError(false);
       navigate("/");
     }).catch(err => {
-        toast("Incorrect credentials");
+        toast.error("Incorrect credentials");
         setLoginError(true);
     });
   };
@@ -72,7 +71,7 @@ function Login() {
                       onChange={(e) => onChange('password', e.target.value)}
                     />
                   </div>
-                  <div className="mb-3 text-start">
+                  {/* <div className="mb-3 text-start">
                     <label htmlFor="role" className="form-label">
                       I want to 
                     </label>
@@ -85,7 +84,7 @@ function Login() {
                         roles.map(role => <option key={role.id} value={role.id}>{role.name}</option>)
                       }
                     </select>
-                  </div>
+                  </div> */}
                   <div className="mb-3 form-check text-start">
                     <input
                       type="checkbox"
@@ -139,18 +138,19 @@ const useRoles = () => {
 }
 
 const useUser = () => {
-    const emptyUser = {
-      username: '',
-      password: '',
-      role_id: ''
-    };
-   const [user, setUser] = useState(emptyUser);
+  const state = useSelector((state) => state.handleUser);
+  const emptyUser = {
+    email: '',
+    password: '',
+  };
 
-   const onChange = (target, value) => {
-     setUser(prev => {
-       return { ...prev, [target]: value };
-     });
-   }
+  const [user, setUser] = useState(state || emptyUser);
+
+  const onChange = (target, value) => {
+    setUser(prev => {
+      return { ...prev, [target]: value };
+    });
+  }
 
    return [user, onChange];
 }
