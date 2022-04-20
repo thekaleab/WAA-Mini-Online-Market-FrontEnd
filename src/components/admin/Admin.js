@@ -211,7 +211,7 @@ const Review = (props) => {
         .catch(error => toast.error("Can't approve review"))
     }
 
-    const rowData = reviews.map((review, index) => {
+    const rowData = reviews?.map((review, index) => {
         return(
                 <tr key={review.id}>
                     <td>{index+1}</td>
@@ -232,7 +232,7 @@ const Review = (props) => {
     return (
         <>
         {
-            reviews.length == 0 ? <></> :
+            reviews?.length == 0 ? <></> :
             <tr>
                 <td colSpan={3} className="ps-5 ms-5 pb-0 pe-0">
                     <div className="w-100 ps-5">
