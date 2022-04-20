@@ -1,7 +1,8 @@
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, resolvePath } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { signOut } from "../../redux/action";
+import * as roleService from "../../services/roleService";
 
 function Navbar() {
   const state = useSelector((state) => state.handleCart);
@@ -35,44 +36,53 @@ function Navbar() {
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-              <li className="nav-item mx-2">
-                <NavLink
-                  className="nav-link active dark-text"
-                  aria-current="page"
-                  to="/"
-                >
-                  Home
-                </NavLink>
-              </li>
-              <li className="nav-item dark-text mx-2">
-                <NavLink className="nav-link" to="/products">
-                  Products
-                </NavLink>
-              </li>
-              <li className="nav-item dark-text mx-2">
-                <NavLink className="nav-link" to="/seller/products">
-                     Seller Products
-                </NavLink>
-              </li>
-              <li className="nav-item dark-text mx-2">
-                <NavLink className="nav-link" to="/about">
-                  About
-                </NavLink>
-              </li>
+                <li className="nav-item mx-2">
+                  <NavLink
+                    className="nav-link active dark-text"
+                    aria-current="page"
+                    to="/"
+                  >
+                    Home
+                  </NavLink>
+                </li>
+                {(roleService.publicOnly(userState) || !roleService.sellerOnly(userState)) && 
+                    
+                  <li className="nav-item dark-text mx-2">
+                      <NavLink className="nav-link" to="/products">
+                        Products
+                      </NavLink>
+                  </li>
+                    
+                }
+                { roleService.adminOnly(userState) && 
+                  <li className="nav-item dark-text mx-2">
+                      <NavLink className="nav-link" to="/admin">
+                         Dashboard
+                      </NavLink>
+                  </li>
+                }
+                {roleService.sellerOnly(userState) && 
+                  <li className="nav-item dark-text mx-2">
+                    <NavLink className="nav-link" to="/seller/products">
+                        Products
+                    </NavLink>
+                  </li>
+                }
+                <li className="nav-item dark-text mx-2">
+                  <NavLink className="nav-link" to="/about">
+                    About
+                  </NavLink>
+                </li>
             </ul>
             <div className="buttons d-flex">
               <div className="btn d-flex align-items-center">
-              {userState ? (
+              {roleService.loggedInOnly(userState) ? (
                   <>
-                    <div>
+                    <div onClick={() => navigate('/profile')}>
                       {userState?.firstName !== null
                         ? userState?.firstName
                         : userState?.email}
                     </div>
-
-                    <NavLink to="/orders" className="btn btn-outline-dark ms-2">
-                      Orders
-                    </NavLink>
                     <button
                       type="button"
                       className="btn btn-outline-dark ms-2"
@@ -91,10 +101,19 @@ function Navbar() {
                     </NavLink>
                   </>
                 )}
-                <NavLink to="/cart" className="btn btn-outline-dark ms-2">
-                  <i className="fa fa-shopping-cart me-1"></i> Cart (
-                  {state && (state.length === 0 ? 0 : state.length)})
-                </NavLink>
+                { roleService.loggedInOnly(userState) && !roleService.adminOnly(userState) &&
+                  <NavLink to="/orders" className="btn btn-outline-dark ms-2">
+                    Orders
+                  </NavLink>
+                }
+                { 
+                    roleService.buyerOnly(userState) && 
+                    
+                    <NavLink to="/cart" className="btn btn-outline-dark ms-2">
+                      <i className="fa fa-shopping-cart me-1"></i> Cart (
+                      {state && (state.length === 0 ? 0 : state.length)})
+                    </NavLink>
+                }
               </div>
             </div>
           </div>

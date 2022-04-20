@@ -1,5 +1,6 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import CurrencyFormat from "react-currency-format";
 import { toast } from "react-toastify";
 import { Dropdown } from "react-bootstrap";
@@ -11,7 +12,8 @@ import * as AppConst from "../../services/constants";
 function Order(props) {
   const order = props.order;
   const orderStatusLUT = props.orderStatusLUT;
-
+  const userState = useSelector((userState) => userState.handleUser);
+  
   return (
     <div className="mb-5 border p-4">
       <div className="row d-flex justify-content-between mb-3">
@@ -81,37 +83,63 @@ const orderStatusTOActionMapping = {
 }
 
 
-const getNextAllowedStatus = (current_status) => {
-  switch(current_status){
-   
-    case "RECEIVED": //
-      return ["CANCELLED", "SHIPPED", "RECEIPT"]
-      break;
-    case "DELIVERED":
-      return ["RETURNED", "FINALIZED", "RECEIPT"]
-      break;
-    case "SHIPPED":
-      return ["DELIVERED", "RECEIPT"]
-      break;
-    case "CART":
-      return [];
-      break;    
-    case "RETURNED":
-    case "CANCELLED":
-    case "FINALIZED":
-    default:
-      return ["RECEIPT"];
-      break;
+const getNextAllowedStatus = (current_status, mode="BUYER") => {
+  if(mode=="ADMIN") {
+    return [];
+  }
+  if(mode == "seller") {
+    switch(current_status){
+      case "RECEIVED": //
+        return ["CANCELLED", "SHIPPED", "RECEIPT"]
+        break;
+      case "DELIVERED":
+        return ["FINALIZED", "RECEIPT"]
+        break;
+      case "SHIPPED":
+        return ["DELIVERED", "RECEIPT"]
+        break;
+      case "CART":
+        return [];
+        break;    
+      case "RETURNED":
+      case "CANCELLED":
+      case "FINALIZED":
+      default:
+        return ["RECEIPT"];
+        break;
+    }
+  } else {
+    switch(current_status){
+      case "RECEIVED": //
+        return ["CANCELLED", "RECEIPT"]
+        break;
+      case "DELIVERED":
+        return ["RETURNED", "RECEIPT"]
+        break;
+      case "SHIPPED":
+        return ["RECEIPT"]
+        break;
+      case "CART":
+        return [];
+        break;    
+      case "RETURNED":
+      case "CANCELLED":
+      case "FINALIZED":
+      default:
+        return ["RECEIPT"];
+        break;
+    }
   }
 }
 
 const OrderStatusBtn = (props) => {
   const currentStatus = props.order.status;
-  const [nextStatus, setNextStatus] = useState(getNextAllowedStatus(currentStatus.name));
+  const userState = useSelector((userState) => userState.handleUser);
+  const [nextStatus, setNextStatus] = useState(getNextAllowedStatus(currentStatus.name, userState.role.name));
   const orderStatusLUT = props.orderStatusLUT;
 
   useEffect(() => {
-      setNextStatus(getNextAllowedStatus(props.order.status.name));
+      setNextStatus(getNextAllowedStatus(props.order.status.name, userState.role.name));
   }, [props]);
 
   const onClick = (selectedAction)  => {

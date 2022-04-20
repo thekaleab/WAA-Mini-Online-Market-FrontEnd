@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
 import { NavLink, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 
 import * as AppConst from "../../services/constants";
+import * as roleService from "../../services/roleService";
+import * as api from '../../services/api';
 
 import { addCart } from "../../redux/action";
 
-import * as api from '../../services/api';
 
 function Product() {
   const { id } = useParams();
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
+  const userState = useSelector((userState) => userState.handleUser);
   
   const dispatch = useDispatch();
 
@@ -76,15 +79,20 @@ function Product() {
           <h3 className="display-6 fw-bold my-4"> ${product.price}</h3>
           <p className="lead">{product.description}</p>
           
-          <button
+          <button disabled={!(roleService.publicOnly(userState) || roleService.buyerOnly(userState))}
             className="btn btn-outline-dark py-2 px-4"
             onClick={() => addProduct(product)}
           >
               {" "}
               Add to Cart
-          </button>
-            <NavLink to="/cart" className="btn btn-dark px-3 py-2 ms-2">
-              Go to Cart
+          </button > 
+            { (roleService.publicOnly(userState) || roleService.buyerOnly(userState)) && 
+              <NavLink to="/cart" className="btn btn-dark px-3 py-2 ms-2">
+                Go to Cart
+              </NavLink>
+            }
+            <NavLink to="/products" className="btn btn-outline-dark px-3 py-2 ms-2">
+                Back
             </NavLink>
           </div>
       </>
