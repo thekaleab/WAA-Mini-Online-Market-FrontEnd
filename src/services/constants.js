@@ -6,14 +6,15 @@ const storage = {
 }
 
 const  api = {
-    baseURL: 'http://172.24.192.1:8081/api/v1',
+    baseURL: 'http://localhost:8081/api/v1',
     orderRoute: '/orders',
     productRoute: '/products', 
     authRoute: '/authenticate',
     roleRoute: '/roles',
     userRoute: '/users',
     reviewRoute: '/reviews',
-    imageAsset: 'http://172.24.192.1:8081/static/images'
+    imageAsset: 'http://localhost:8081/static/images',
+    adminRoute: '/admin'
 };
 
 

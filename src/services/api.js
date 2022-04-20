@@ -96,6 +96,11 @@ export const register = (user) => httpReq.post(userRoute, user);
 const reviewRoute = AppConst.api.reviewRoute;
 export const getReviews = () => httpReq.get(reviewRoute);
 
+// admin end points
+const adminRoute = AppConst.api.adminRoute;
+export const updateUserStatus = (id, status) => httpReq.post(`${adminRoute}/approve/seller/${id}`, status);
+export const updateReviewStatus = (id, status) => httpReq.post(`${adminRoute}/approve/review/${id}`, status);
+
 // roles
 const roleRoute = AppConst.api.roleRoute;
 export const getRoles = async() => {

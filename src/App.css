@@ -46,3 +46,10 @@
 .order-item{
   background-color: rgba(8, 10, 12, 0.068);
 }
+
+
+.btn-xs {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.575rem !important;
+    border-radius: 0.2rem !important;
+}
