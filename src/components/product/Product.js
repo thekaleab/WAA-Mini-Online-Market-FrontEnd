@@ -39,6 +39,12 @@ function Product() {
     getProduct();
   }, []);
 
+  const followUser = () => {
+    api.followUser(product.id)
+      .then(result => toast.success("Following seller"))
+      .catch(err => toast.error("Can't follow user now. Try again later"));
+  }
+
   const Loading = () => {
     return (
       <>
@@ -77,14 +83,19 @@ function Product() {
           </p>
           <h3 className="display-6 fw-bold my-4"> ${product.price}</h3>
           <p className="lead">{product.description}</p>
-          
+          <button disabled={!(roleService.publicOnly(userState) || roleService.buyerOnly(userState))}
+            className="btn btn-outline-dark me-2 py-2 px-4"
+            onClick={() => followUser(product)}
+          >   
+              Follow Seller
+          </button > 
           <button disabled={!(roleService.publicOnly(userState) || roleService.buyerOnly(userState))}
             className="btn btn-outline-dark py-2 px-4"
             onClick={() => addProduct(product)}
           >
-              {" "}
               Add to Cart
           </button > 
+         
             { (roleService.publicOnly(userState) || roleService.buyerOnly(userState)) && 
               <NavLink to="/cart" className="btn btn-dark px-3 py-2 ms-2">
                 Go to Cart

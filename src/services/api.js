@@ -94,6 +94,7 @@ export const getUsers = () => httpReq.get(userRoute);
 export const getUserById = (id) => httpReq.get(`${userRoute}/${id}`);
 export const register = (user) => httpReq.post(userRoute, user);
 export const updateUser = (id, user) => httpReq.put(`${userRoute}/${id}`, user);
+export const followUser = (id) => httpReq.put(`${userRoute}/follow/${id}`, {});
 
 
 // review end points
