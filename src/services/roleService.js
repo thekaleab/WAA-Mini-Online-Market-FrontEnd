@@ -29,3 +29,7 @@ export const publicOnly =(userState) => {
 export const loggedInOnly = (userState) => {
     return ["ADMIN", "BUYER", "SELLER"].includes(userState?.role?.name);
 }
+
+export const approvedSellerOnly = (userState) => {
+    return sellerOnly(userState) && userState.isSellerApproved === true;
+}

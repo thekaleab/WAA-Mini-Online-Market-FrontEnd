@@ -6,12 +6,14 @@ import { useSelector } from "react-redux";
 
 import * as api from '../../services/api';
 import * as AppConst from "../../services/constants";
+import * as roleService from "../../services/roleService";
 import ProductModal from "./ProductModal";
 
 function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const userState = useSelector((userState) => userState.handleUser);
 
   const user = useSelector((state) => state.handleUser);
 
@@ -99,8 +101,9 @@ function Products() {
           </h1>
         </div>
         <div className="col-2 text-end">
-            <button className="btn btn-sm btn-outline btn-dark mt-4" onClick={()=>setShowModal(true)}>
-              <i className="fa fa-plus me-2"></i>Add
+            <button title="Only approved users" disabled={!roleService.approvedSellerOnly(userState)}
+                    className="btn btn-sm btn-outline btn-dark mt-4" onClick={()=>setShowModal(true)}>
+                <i className="fa fa-plus me-2"></i>Add
             </button>
         </div>
         <div className="col-12 mb-5">
