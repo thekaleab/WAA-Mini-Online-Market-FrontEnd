@@ -45,6 +45,8 @@ export const getUserOrders = (id) => httpReq.get(`${orderRoute}/buyer/${id}`);
 export const updateOrder = (order) => httpReq.put(`${orderRoute}/${order.id}`, order);
 export const createOrder = (order) => httpReq.post(orderRoute, order);
 export const cancelOrder = (id) => httpReq.post(`${orderRoute}/cancel/${id}`);
+export const getOrderStatus = () => httpReq.get(`${orderRoute}/status`);
+export const updateOrderStatus = (id, orderStatus) => httpReq.put(`${orderRoute}/status/${id}`, orderStatus)
 
 
 // Cart end points

@@ -7,7 +7,9 @@ import * as api from "../../services/api";
 function Orders() {
   const userState = useSelector((userState) => userState.handleUser);
   const [orders, setOrders] = useState([]);
-
+  const [refreshData, setRefreshData] = useState(false);
+  const [orderStatusLUT, setOrderStatusLUT] = useState([]);
+  
   useEffect(() => {
     if (userState) {
       api.getUserOrders(userState.id)
@@ -16,7 +18,13 @@ function Orders() {
     } else {
       setOrders([]);
     }
-  }, [userState]);
+  }, [userState, refreshData]);
+
+  useEffect(() => {
+    api.getOrderStatus()
+      .then(result => {setOrderStatusLUT(result.data)})
+      .catch(err => err);
+  }, [refreshData]);
 
   return (
     <div className="container">
@@ -24,7 +32,10 @@ function Orders() {
       {orders.length > 0 ? (
         <div className="">
           {orders?.map((order) => (
-            <Order key={order.key} order={order} />
+            <Order key={order.id} 
+                   order={order} 
+                   orderStatusLUT={orderStatusLUT} 
+                   onRefresh={() => setRefreshData(!refreshData)} />
           ))}
         </div>
       ) : (

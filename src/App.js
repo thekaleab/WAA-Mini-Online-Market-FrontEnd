@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 function App() {
   return (
     <div className="app">
-      <ToastContainer position="bottom-right" autoClose={5000} closeOnClick theme="colored" />
+      <ToastContainer position="bottom-right" autoClose={1000} closeOnClick theme="colored" />
       <Router>
         <Navbar />
         {AppRoutes}
