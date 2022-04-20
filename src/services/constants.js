@@ -13,11 +13,12 @@ const  api = {
     roleRoute: '/roles',
     userRoute: '/users',
     reviewRoute: '/reviews',
-    imageAsset: 'http://localhost:8080/static/images',
+    imageAsset: '/static/images',
     adminRoute: '/admin',
-    uploadRoute: '/upload'
+    uploadRoute: '/upload',
 };
 
+export const imgSrcBase = `${api.baseURL}${api.imageAsset}`
 
 
 export { storage, api };

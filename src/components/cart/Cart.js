@@ -41,7 +41,7 @@ function Cart() {
           <div className="row justify-content-center">
             <div className="col-md-4">
               <img
-                src={`${AppConst.api.imageAsset}/${product.imgUrl}`}
+                src={`${AppConst.imgSrcBase}/${product.imgUrl}`}
                 alt={product.name}
                 height="200px"
                 width="180px"

@@ -99,7 +99,7 @@ function Products() {
               <div className="col-md-3 mb-4">
                 <div className="card h-100 text-center p-4">
                   <img
-                    src={`${AppConst.api.imageAsset}/${product.imgUrl}`}
+                    src={`${AppConst.imgSrcBase}/${product.imgUrl}`}
                     alt={product.name}
                     height="250px"
                     className="card-img-top"

@@ -55,7 +55,7 @@ function SellerProduct() {
       <>
         <div className="col-md-6">
           <img
-            src={`${AppConst.api.imageAsset}/${product.imgUrl}`}
+            src={`${AppConst.imgSrcBase}/${product.imgUrl}`}
             alt={product.name}
             height="400px"
             width="400px"
