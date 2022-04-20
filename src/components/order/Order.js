@@ -17,7 +17,7 @@ function Order(props) {
   return (
     <div className="mb-5 border p-4">
       <div className="row d-flex justify-content-between mb-3">
-        <div className="col-3">
+        <div className="col-9">
           <h5>
             <small>PLACED on</small>  
             <small> {moment.unix(Date.parse(order.orderTime)/1000).format("MMMM Do YYYY")}</small>
@@ -32,12 +32,12 @@ function Order(props) {
             prefix={"$"}
           />
         </div>
-        <div className="col-2">
+        {/* <div className="col-2">
             <button disabled className="btn btn-outline-dark">{order.status.name}</button>
-        </div>
+        </div> */}
       
-        <div className="col-2 text-end">
-          <OrderStatusBtn order={order} orderStatusLUT={orderStatusLUT} onRefresh={()=>props.onRefresh()} />
+        <div className="col- text-end">
+          <button className="btn btn-outline-dark">RECEIPT</button>
         </div>
       </div>
       {order.orderItems?.map((item) => (
@@ -46,22 +46,34 @@ function Order(props) {
             className="col-2"
             src={`${AppConst.api.imageAsset}/${item?.product.imgUrl}`}
             alt=""
-            width="100px"
-            height="100px"
+            width="120px"
+            height="120px"
           />
           <div className="col-9">
-            <p>{item?.product.name}</p>
-            <p>
-              <small>$</small>
-              <strong>{item?.product.price}</strong>
-            </p>
-            <div>
-              {Array(item?.product.rating)
-                .fill()
-                .map((_, i) => (
-                  <p key={item.product.id + i}>⭐</p>
-                ))}
-            </div>
+            <div className="row">
+              <div className="col-8">
+                <p>{item?.product.name}</p>
+                <p>
+                  <small>$</small>
+                  <strong>{item?.product.price}</strong>
+                </p>
+                <div>
+                  {Array(item?.product.rating)
+                    .fill()
+                    .map((_, i) => (
+                      <p key={item.product.id + i}>⭐</p>
+                    ))}
+                </div>
+              </div>
+              
+              <div className="col-2">
+                  <button disabled className="btn btn-outline-dark">{item.status.name}</button>
+              </div>
+      
+              <div className="col-2 text-end">
+                <OrderStatusBtn orderItem={item} order={order} orderStatusLUT={orderStatusLUT} onRefresh={()=>props.onRefresh()} />
+              </div>    
+              </div>
           </div>
         </div>
       ))}
@@ -87,16 +99,16 @@ const getNextAllowedStatus = (current_status, mode="BUYER") => {
   if(mode=="ADMIN") {
     return [];
   }
-  if(mode == "seller") {
+  if(mode == "SELLER") {
     switch(current_status){
       case "RECEIVED": //
-        return ["CANCELLED", "SHIPPED", "RECEIPT"]
+        return ["CANCELLED", "SHIPPED"]
         break;
       case "DELIVERED":
-        return ["FINALIZED", "RECEIPT"]
+        return ["FINALIZED"]
         break;
       case "SHIPPED":
-        return ["DELIVERED", "RECEIPT"]
+        return ["DELIVERED"]
         break;
       case "CART":
         return [];
@@ -105,19 +117,19 @@ const getNextAllowedStatus = (current_status, mode="BUYER") => {
       case "CANCELLED":
       case "FINALIZED":
       default:
-        return ["RECEIPT"];
+        return [];
         break;
     }
   } else {
     switch(current_status){
       case "RECEIVED": //
-        return ["CANCELLED", "RECEIPT"]
+        return ["CANCELLED"]
         break;
       case "DELIVERED":
-        return ["RETURNED", "RECEIPT"]
+        return ["RETURNED"]
         break;
       case "SHIPPED":
-        return ["RECEIPT"]
+        return []
         break;
       case "CART":
         return [];
@@ -126,32 +138,25 @@ const getNextAllowedStatus = (current_status, mode="BUYER") => {
       case "CANCELLED":
       case "FINALIZED":
       default:
-        return ["RECEIPT"];
+        return [];
         break;
     }
   }
 }
 
 const OrderStatusBtn = (props) => {
-  const currentStatus = props.order.status;
+  const currentStatus = props.orderItem.status;
   const userState = useSelector((userState) => userState.handleUser);
   const [nextStatus, setNextStatus] = useState(getNextAllowedStatus(currentStatus.name, userState.role.name));
   const orderStatusLUT = props.orderStatusLUT;
 
   useEffect(() => {
-      setNextStatus(getNextAllowedStatus(props.order.status.name, userState.role.name));
+      setNextStatus(getNextAllowedStatus(props.orderItem.status.name, userState.role.name));
   }, [props]);
 
-  const onClick = (selectedAction)  => {
-    if(selectedAction == "RECEIPT") {
-      // download receipt api
-    } else {
-      updateOrderStatus(selectedAction);
-    }
-  }
   const updateOrderStatus = (selectedAction) => {
       const orderStatus = orderStatusLUT.find(oStatus => oStatus.name == selectedAction)
-      api.updateOrderStatus(props.order.id, orderStatus)
+      api.updateOrderItemStatus(props.orderItem.id, {orderId: props.order.id, statusId: orderStatus.id})
         .then(result => {
            toast.success("status updated");
            props.onRefresh();
@@ -171,7 +176,7 @@ const OrderStatusBtn = (props) => {
           {
               nextStatus.map((nStatus) => 
                 <Dropdown.Item key={nStatus} 
-                               onClick={()=>onClick(nStatus)} >
+                               onClick={()=>updateOrderStatus(nStatus)} >
                     {orderStatusTOActionMapping[nStatus]}
                 </Dropdown.Item>
               )

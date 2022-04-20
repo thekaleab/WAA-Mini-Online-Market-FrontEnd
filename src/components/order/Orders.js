@@ -11,8 +11,15 @@ function Orders() {
   const [orderStatusLUT, setOrderStatusLUT] = useState([]);
   
   useEffect(() => {
+    let apiEndPoint;
     if (userState) {
-      api.getUserOrders(userState.id)
+      if(userState.role.name=="BUYER") {
+        apiEndPoint = api.getBuyerOrders;
+      } else {
+        apiEndPoint = api.getSellerOrders;
+      }
+
+      apiEndPoint(userState.id)
           .then(result => setOrders(result.data))
           .catch(error => setOrders([]));
     } else {

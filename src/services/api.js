@@ -41,12 +41,13 @@ export const deleteProduct = (id) => httpReq.delete(`${productRoute}/${id}`);
 const orderRoute = AppConst.api.orderRoute;
 export const getOrders = () => httpReq.get(orderRoute);
 export const getOrderById = (id) => httpReq.get(`${orderRoute}/${id}`);
-export const getUserOrders = (id) => httpReq.get(`${orderRoute}/buyer/${id}`);
+export const getBuyerOrders = (id) => httpReq.get(`${orderRoute}/buyer/${id}`);
+export const getSellerOrders = (id) => httpReq.get(`${orderRoute}/seller/${id}`);
 export const updateOrder = (order) => httpReq.put(`${orderRoute}/${order.id}`, order);
 export const createOrder = (order) => httpReq.post(orderRoute, order);
 export const cancelOrder = (id) => httpReq.post(`${orderRoute}/cancel/${id}`);
 export const getOrderStatus = () => httpReq.get(`${orderRoute}/status`);
-export const updateOrderStatus = (id, orderStatus) => httpReq.put(`${orderRoute}/status/${id}`, orderStatus)
+export const updateOrderItemStatus = (id, orderStatus) => httpReq.put(`${orderRoute}/item/status/${id}`, orderStatus)
 
 
 // Cart end points
