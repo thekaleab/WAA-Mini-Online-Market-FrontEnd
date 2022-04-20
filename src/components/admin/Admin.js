@@ -37,7 +37,7 @@ export default function Admin() {
         <div>
             <div className="container py-5 ">
                 <div className="row py-5 justify-content-center align-content-center">
-                    <Tab.Container id="left-tabs-example" defaultActiveKey="tab1" transition={false}> 
+                    <Tab.Container variant="tabs" id="left-tabs-example" defaultActiveKey="tab1" transition={false}> 
                         <Row>
                             <Col sm={3}>
                             <Nav className="flex-column dark-text">

@@ -1,16 +1,18 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useReducer, useState } from "react";
 import Skeleton from "react-loading-skeleton";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 
 import * as AppConst from "../../services/constants";
-
+import * as roleService from "../../services/roleService";
 import * as api from '../../services/api';
 
 function Products() {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState(data);
   const [loading, setLoading] = useState(false);
+  const userState = useSelector((userState) => userState.handleUser);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -111,7 +113,7 @@ function Products() {
                       to={`/products/${product.id}`}
                       className="btn btn-outline-dark"
                     >
-                      Buy Now
+                        {(roleService.publicOnly(userState) || roleService.buyerOnly(userState)) ? "Buy Now" : "Details"}
                     </NavLink>
                   </div>
                 </div>

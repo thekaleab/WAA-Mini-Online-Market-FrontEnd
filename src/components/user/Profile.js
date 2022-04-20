@@ -8,7 +8,7 @@ function Profile(){
         <div className="container py-4 my-4">
           <div className="row justify-content-center align-content-center">
             
-              <Tab.Container id="left-tabs-example" defaultActiveKey="first" transition={false}> 
+              <Tab.Container id="left-tabs-example" defaultActiveKey="personal_info" transition={false}> 
                 <Row>
                   <Col sm={3}>
                     <Nav className="flex-column dark-text">
