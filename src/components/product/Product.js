@@ -58,12 +58,11 @@ function Product() {
   };
 
   const ShowProduct = () => {
-    const imgUrl = `${AppConst.api.imageAsset}/${product.imgUrl}`;
     return (
       <>
         <div className="col-md-6">
           <img
-            src={ imgUrl}
+            src={`${AppConst.imgSrcBase}/${product.imgUrl}`}
             alt={product.name}
             height="400px"
             width="400px"
