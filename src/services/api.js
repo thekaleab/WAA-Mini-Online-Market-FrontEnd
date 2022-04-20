@@ -121,7 +121,18 @@ export const getRoles = async() => {
                 );        
 };
 
+const uploadRoute = AppConst.api.uploadRoute;
+export const uploadFiles = (file) => {
+    var formData = new FormData();
+    formData.append("file", file);
+    const config = {
+        headers: {
+            'Content-type': 'multipart/form-data'
+        }
+    }
+    return httpReq.post(uploadRoute, formData, config);
 
+}
 // fake payment 
 export const getStripSecrete =  (total) => Promise.resolve({ data: {
     clientSecret: 'pi_1DqfHd2eZvKYlo2CuJu7a7Ci_secret_mhjmsxBEPxbVvuNrXPsokvJX7'

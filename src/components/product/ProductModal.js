@@ -41,25 +41,43 @@ export default function ProductModal(props) {
       })
     }
   
+    const uploadFile = () => {
+      
+    }
+
+    const uploadImage = (file) => {
+          api.uploadFiles(file)
+          .then(result => {
+              let success = result;    
+          })
+          .catch(error => {
+              toast.error("image can't be uploaded");
+          });
+      
+    }
     const onSubmit = (e) => {
         e.preventDefault();
-        
-        if(props.mode == 'edit') {
-          const updatedImage = imageRef.current.files[0]?.name;
-          const productDto = {...product, image: updatedImage ? updatedImage: product.image};
+        const imageFile = imageRef.current.files[0];
+        if(props.mode == 'edit') {  
+          const updatedImage = imageRef.current.files[0]?.name;      
+          const productDto = {...product, imgUrl: updatedImage ? updatedImage: product.imageUrl};
           api.updateProduct(productDto)
           .then(result => {
               const productRes = result.data;
               toast.success('Product successfully updated!');
+              if(updatedImage) {
+                uploadImage(imageFile);
+              }
               props.onSuccess();
               props.onHide();
           }).catch(error => {
               toast.error("Can't update product, please check and try again!");
           })
         } else {
-          const productDto = {...product, image: imageRef.current.files[0]?.name }
+          const productDto = {...product, imgUrl: imageRef.current.files[0]?.name }
           api.createProduct(productDto)
           .then(result => {
+              uploadImage(imageFile);
               const productRes = result.data;
               toast.success('Product successfully created!');
               navigate(`/seller/products/${productRes.id}`);

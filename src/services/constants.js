@@ -15,6 +15,7 @@ const  api = {
     reviewRoute: '/reviews',
     imageAsset: 'http://localhost:8080/static/images',
     adminRoute: '/admin',
+    uploadRoute: '/upload'
 };
 
 
