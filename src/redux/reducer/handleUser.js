@@ -24,7 +24,12 @@ const handleUser = (state = user, action) => {
       storageSerive.storeUser(updatedState);
       return updatedState;
       break;
-
+    
+    case "UPDATE_DETAIL":
+      updatedState = {...state, firstName: action.payload.firstName, lastName: action.payload.lastName};
+      storageSerive.storeUser(updatedState);
+      return updatedState;
+      break;
     default:
       return state;
       break;

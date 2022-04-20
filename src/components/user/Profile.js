@@ -1,9 +1,24 @@
 import { Tab, Row, Col, Nav, Modal, Container } from 'react-bootstrap';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { updateUserDetail } from "../../redux/action";
+
+import * as api from "../../services/api";
 
 import "./profile.css";
+import { toast } from 'react-toastify';
 
 function Profile(){
+  const userState = useSelector((userState) => userState.handleUser);
+  const [user, setUser] = useState(userState);
+  const [refreshData, setRefreshData] = useState(false);
+
+    useEffect(() => {
+        api.getUserById(userState.id)
+          .then(result => setUser(result.data))
+          .catch(err => err);
+    }, [refreshData]);
+
     return(
         <div className="container py-4 my-4">
           <div className="row justify-content-center align-content-center">
@@ -23,7 +38,7 @@ function Profile(){
                   <Col sm={9}>
                     <Tab.Content>
                       <Tab.Pane eventKey="personal_info">
-                          <PersonalInfo />
+                          <PersonalInfo  user={user} onRefresh={ () => setRefreshData(!refreshData) } />
                       </Tab.Pane>
                       <Tab.Pane eventKey="address">
                           <Address />
@@ -41,13 +56,18 @@ function Profile(){
 }
 
 
-const PersonalInfo = () => {
+const PersonalInfo = (props) => {
   const [showPersonalInfoModal, setShowPersonalInfoModal] = useState(false);
+  const user = props.user;
   return(
     <div className="container">
       <div className="row g-0">
         <div className="modals">
-            <PersonalInfoModal show={showPersonalInfoModal} onHide={()=>setShowPersonalInfoModal(false)} />
+            <PersonalInfoModal user={user} 
+                               show={showPersonalInfoModal} 
+                               onHide={()=>setShowPersonalInfoModal(false)} 
+                               onRefresh = {() => props.onRefresh()}
+                               />
         </div>
         <div className="card col-md-8">
             <div className="card-header row g-0 py-2">
@@ -64,19 +84,19 @@ const PersonalInfo = () => {
             <div className="card-body py-2">
               <div className="row my-2 py-2 ">
                   <div className="col-4 fw-bold text-start">First Name</div>
-                  <div className="col-8">{'Abenezer'}</div>
+                  <div className="col-8">{user.firstName}</div>
               </div>
               <div className="row my-2 py-2 ">
                   <div className="col-4 fw-bold text-start">Last Name</div>
-                  <div className="col-8">{'Mamuyea'}</div>
+                  <div className="col-8">{user.lastName}</div>
               </div>
               <div className="row my-2 py-2 ">
                   <div className="col-4 fw-bold text-start">Email</div>
-                  <div className="col-8">{'test@test.com'}</div>
+                  <div className="col-8">{user.email}</div>
               </div>
               <div className="row my-2 py-2 ">
                   <div className="col-4 fw-bold text-start">Role</div>
-                  <div className="col-8">{'BUYER'}</div>
+                  <div className="col-8">{user?.role?.name}</div>
               </div>
               <div className="row my-2 py-2 ">
                   <div className="col-4 fw-bold text-start">Address</div>
@@ -147,26 +167,13 @@ const Payment = () => {
 
 
 const PersonalInfoModal = (props) => {
-  let modal = props.modal;
 
-  const hideModal = () => {
-    props.onHide();
-  }
-  const emptyUser = {
-    firstName: '',
-    lastName: '',
-    password: '',
-    email: '',
-    address: {
-      zip: '',
-      street: '',
-      city: '',
-      state: '',
-      country: ''
-    }
-  };
+  const [user, setUser] = useState(props.user);
+  const dispatch = useDispatch();
 
-  const [user, setUser] = useState(emptyUser);
+  useEffect(() => {
+      setUser(props.user);
+  }, [props])
 
   const onChange = (target, value) => {
     setUser(prev => {
@@ -188,11 +195,20 @@ const PersonalInfoModal = (props) => {
 
   const update = (e) => {
       e.preventDefault();
-      return false;
+      api.updateUser(user.id, {firstName: user.firstName, lastName: user.lastName})
+        .then(result => {
+            toast.success("User successfully updated");
+            dispatch(updateUserDetail(user));
+            props.onHide();
+            props.onRefresh();
+        })
+        .catch(err => {
+          toast.error("User can't be updated")
+        });
   }
 
   return (
-      <Modal {...props} aria-labelledby="m_title" size="lg" centered>
+      <Modal {...props} aria-labelledby="m_title"  centered>
         <Modal.Header closeButton className="px-4">
           <Modal.Title id="m_title" >
             Personal Information
@@ -202,7 +218,7 @@ const PersonalInfoModal = (props) => {
           <form onSubmit={update}>
             <div className="container">
               <div className="row">
-                <div className="col-6">
+                <div className="col-12">
                   <div className="mb-3 text-start">
                     <label htmlFor="firstName" className="form-label">
                        First Name
@@ -237,43 +253,50 @@ const PersonalInfoModal = (props) => {
                         {}
                     </div>
                   </div>
-                  <div className="mb-3 text-start">
-                    <label htmlFor="email" className="form-label">
-                       Email
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="email"
-                      aria-describedby="emailHelp"
-                      required
-                      value={user.email}
-                      onChange={(e) => onChange('email', e.target.value)}
-                    />
-                    <div id="emailHelp" className="form-text">
-                      {}
-                    </div>
-                  </div>
-                  <div className="mb-3 text-start">
-                    <label htmlFor="address_street" className="form-label">
-                       Street Address
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="address_street"
-                      aria-describedby="streetHelp"
-                      required
-                      value={user.address.street}
-                      onChange={(e) => onChange('address.street', e.target.value)}
-                    />
-                    <div id="streetHelp" className="form-text">
-                       {}
-                    </div>
-                  </div>
                 </div>
-                <div className="col-6">
-                  
+                
+                <div className="col-4 offset-4">
+                    <button  onClick={update} className="btn btn-dark w-100 mt-5 mb-3">
+                         Update
+                    </button>
+                </div>
+              </div>
+            </div>    
+          </form>
+        </Modal.Body>
+      </Modal>
+  )
+}
+
+const AddressModal = (props) => {
+
+  let modal = props.modal;
+
+  const hideModal = () => {
+    props.onHide();
+  }
+
+  const [user, setUser] = useState(props.user);
+
+  const onChange = (target, value) => {
+    setUser(prev => {
+      if(target.startsWith('address.')) {
+          return {
+            ...prev,
+            address: {
+              ...prev.address,
+              [target.split('address.')[1]]: value
+            }
+          }
+      } else {
+        return {
+          ...prev, [target]: value
+        }
+      }
+    })
+  }
+  return(
+        <div className="col-12">
                   <div className="mb-3 text-start">
                     <label htmlFor="address_city" className="form-label">
                        City
@@ -284,7 +307,7 @@ const PersonalInfoModal = (props) => {
                       id="address_city"
                       aria-describedby="cityHelp"
                       required
-                      value={user.address.city}
+                      value={user.address?.city}
                       onChange={(e) => onChange('address.city', e.target.value)}
                     />
                     <div id="cityHelp" className="form-text">
@@ -301,7 +324,7 @@ const PersonalInfoModal = (props) => {
                       id="addresss_state"
                       aria-describedby="stateHelp"
                       required
-                      value={user.address.state}
+                      value={user.address?.state}
                       onChange={(e) => onChange('address.state', e.target.value)}
                     />
                     <div id="stateHelp" className="form-text">
@@ -318,7 +341,7 @@ const PersonalInfoModal = (props) => {
                       id="address_zip"
                       aria-describedby="zipHelp"
                       required
-                      value={user.address.zip}
+                      value={user.address?.zip}
                       onChange={(e) => onChange('address.zip', e.target.value)}
                     />
                     <div id="zipHelp" className="form-text">
@@ -335,7 +358,7 @@ const PersonalInfoModal = (props) => {
                       id="streetCountry"
                       aria-describedby="countryHelp"
                       required
-                      value={user.address.country}
+                      value={user.address?.country}
                       onChange={(e) => onChange('address.country', e.target.value)}
                     />
                     <div id="countryHelp" className="form-text">
@@ -343,21 +366,7 @@ const PersonalInfoModal = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="col-4 offset-4">
-                    <button  onClick={update} className="btn btn-dark w-100 mt-5 mb-3">
-                         Update
-                    </button>
-                </div>
-              </div>
-            </div>    
-          </form>
-        </Modal.Body>
-      </Modal>
   )
-}
-
-const AddressModal = () => {
-
 }
 
 const PaymentModal = () => {

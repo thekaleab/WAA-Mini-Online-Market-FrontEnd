@@ -39,3 +39,10 @@ export const signOut = () => {
     payload: null,
   };
 };
+
+export const updateUserDetail = (user) => {
+  return {
+    type: "UPDATE_DETAIL",
+    payload: user
+  }
+}
