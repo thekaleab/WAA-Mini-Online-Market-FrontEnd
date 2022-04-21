@@ -108,19 +108,7 @@ export const updateReviewStatus = (id, status) => httpReq.post(`${adminRoute}/ap
 
 // roles
 const roleRoute = AppConst.api.roleRoute;
-export const getRoles = async() => {
-        return httpReq.get(roleRoute)
-                .then(result => result)
-                .catch(err =>
-                    Promise.resolve({  // fallback
-                        data: [
-                            {id: 1, name: 'ADMIN'},
-                            {id: 2, name: 'BUYER'},
-                            {id: 3, name: 'SELLER'}
-                        ]
-                    })
-                );        
-};
+export const getRoles = () => httpReq.get(roleRoute);
 
 const uploadRoute = AppConst.api.uploadRoute;
 export const uploadFiles = (file) => {

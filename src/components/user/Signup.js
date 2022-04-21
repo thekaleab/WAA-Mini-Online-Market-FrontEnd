@@ -111,7 +111,7 @@ function Signup() {
                     onChange={(e) => onChange('role_id', e.target.value)}
                   > 
                     {
-                      roles.map(role => <option key={role.id} value={role.id}>{role.name}</option>)
+                      roles.filter(role => role.id !== 1).map(role => <option key={role.id} value={role.id}>{role.name}</option>)
                     }
                   </select>
                 </div>

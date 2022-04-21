@@ -60,7 +60,7 @@ export default function ProductModal(props) {
         const imageFile = imageRef.current.files[0];
         if(props.mode == 'edit') {  
           const updatedImage = imageRef.current.files[0]?.name;      
-          const productDto = {...product, imgUrl: updatedImage ? updatedImage: product.imageUrl};
+          const productDto = {...product, imgUrl: updatedImage ? updatedImage: product.imgUrl};
           api.updateProduct(productDto)
           .then(result => {
               const productRes = result.data;
