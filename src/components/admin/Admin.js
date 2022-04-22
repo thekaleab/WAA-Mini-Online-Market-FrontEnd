@@ -165,13 +165,6 @@ const Product = (props) => {
         return(<Fragment key={product.id}>
                 <tr key={product.id}>
                     <td>
-                        {
-                            // product.reviews.length > 0 && 
-                            <button onClick={()=>product.showReview = !product.showReview} 
-                                className="btn btn-xs btn-outline-dark me-2">
-                                    <i className="fa fa-plus"></i> 
-                            </button>
-                        }
                         {product.name }    
                     </td>
                     <td>{product.price}</td>
