@@ -25,8 +25,6 @@ function Cart() {
     } else {
       toast.info("Please login first!");
     }
-
-    navigate("/checkout"); // TODO remove this.
   };
 
   const cartItems = (product) => {

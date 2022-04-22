@@ -53,3 +53,7 @@
     font-size: 0.575rem !important;
     border-radius: 0.2rem !important;
 }
+
+.not-found {
+  height: 80vh;
+}
