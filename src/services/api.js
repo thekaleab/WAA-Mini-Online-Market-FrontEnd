@@ -7,35 +7,13 @@ import fake_products from "./fake_products";
 
 // Product end points
 const productRoute = AppConst.api.productRoute;
-
-export const getProducts = async () => { 
-        const data = await httpReq.get(productRoute)
-            .then(result => {
-               return result
-            })
-            .catch(error => {
-                Promise.resolve({data: fake_products});
-            });
-        return data;
-    }
-
-export const getProductById = (id) => { 
-    return httpReq.get(`${productRoute}/${id}`)
-        .then(result => result)
-        .catch(error => {
-            const product = fake_products.find(p => p.id == id);
-            if(product !== null || product !== undefined) {
-                return Promise.resolve({data: product });
-            } else {
-                return Promise.reject();
-            }
-        });
-}
-
+export const getProducts = () => httpReq.get(productRoute);
+export const getProductById = (id) => httpReq.get(`${productRoute}/${id}`)
 export const getSellerProduct = (id) => httpReq.get(`${productRoute}/seller/${id}`);
 export const createProduct = (product) => httpReq.post(productRoute, product);
 export const updateProduct = (product) => httpReq.put(`${productRoute}/${product.id}`, product);
 export const deleteProduct = (id) => httpReq.delete(`${productRoute}/${id}`);
+export const getProductSeller = (id) => httpReq.get(`${productRoute}/product-seller/${id}`);
 
 // Orders end points
 const orderRoute = AppConst.api.orderRoute;
