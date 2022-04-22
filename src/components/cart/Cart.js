@@ -10,7 +10,7 @@ import * as AppConst from "../../services/constants";
 function Cart() {
 
   const state = useSelector((state) => state.handleCart);
-  const [ userState, setUserState ] = useState(null);
+  const userState = useSelector((state) => state.handleUser);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();

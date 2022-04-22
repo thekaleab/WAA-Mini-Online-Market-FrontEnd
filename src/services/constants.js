@@ -19,6 +19,7 @@ const  api = {
 };
 
 export const imgSrcBase = `${api.baseURL}${api.imageAsset}`
+export const invoiceBase = `${api.baseURL}${api.orderRoute}/invoice`
 
 
 export { storage, api };

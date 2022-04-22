@@ -56,8 +56,9 @@ function Checkout() {
           navigate("/orders");
         }).catch(res => {
           toast.error('Something happened, please contact support');
-          navigate('/products');
-          setDisabled(true);
+          setDisabled(false);
+          setProcessing(false);
+          setSucceeded(false);
         })   
       })
       .catch((error) => {

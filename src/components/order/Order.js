@@ -36,20 +36,24 @@ function Order(props) {
             <button disabled className="btn btn-outline-dark">{order.status.name}</button>
         </div> */}
       
-        <div className="col- text-end">
-          <button className="btn btn-outline-dark">RECEIPT</button>
+        <div className="col-3 pt-3 pe-3 text-end">
+          <a type="button" className="btn btn-outline-dark" 
+            href={`${AppConst.invoiceBase}/${order.id}`} download target="_blank">
+              RECEIPT
+          </a>
         </div>
       </div>
       {order.orderItems?.map((item) => (
         <div key={item.id} className="row mb-3 mx-0 p-3 d-flex align-items-center order-item">
-          <img
-            className="col-2"
-            src={`${AppConst.api.imageAsset}/${item?.product.imgUrl}`}
-            alt=""
-            width="120px"
-            height="120px"
-          />
-          <div className="col-9">
+          <div className="col-2">
+              <img
+                className="col-2"
+                src={`${AppConst.imgSrcBase}/${item?.product.imgUrl}`}
+                alt=""
+                style={{width: 150 +"px", height: 150 + "px"}}
+              />
+          </div>
+          <div className="col-10">
             <div className="row">
               <div className="col-8">
                 <p>{item?.product.name}</p>

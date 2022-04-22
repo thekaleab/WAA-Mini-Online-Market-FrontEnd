@@ -200,7 +200,13 @@ const Product = (props) => {
 
 const Review = (props) => {
     const product = props.data;
+    // const [reviews, setReviews] = useState([]);
     const reviews = product.reviews;
+    // useEffect(()=> {
+    //     api.getProductReviews()
+    //         .then(result => setReviews(result.data))
+    //         .catch(err => err);
+    // }, [props.data]);
 
     const onChangeApprovalStatus = (review) => {
         api.updateReviewStatus(review.id, {productId: product.id , status: true})
